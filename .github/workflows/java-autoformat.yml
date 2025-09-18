@@ -1,0 +1,42 @@
+name: Formatting Java Code with Spotless
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up Java and Maven
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      # Run Spotless to format code
+      - name: Run Spotless
+        run: mvn spotless:apply
+
+      # Commit and push changes if any formatting was applied
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          if ! git diff --quiet; then
+            git add .
+            git commit -m "chore: Auto-format Java code with Spotless [GitHub Action]"
+            git push
+          else
+            echo "No changes to push."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
