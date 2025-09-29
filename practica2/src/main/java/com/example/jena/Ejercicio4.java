@@ -7,6 +7,7 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.riot.RDFDataMgr;
 
 public class Ejercicio4 {
     public static void main(String[] args) {
@@ -65,6 +66,25 @@ public class Ejercicio4 {
         charlie.addProperty(FOAF.knows, alice);
 
         model.write(System.out, "TURTLE");
-        System.out.println("Alice knows:");
+        System.out.println("Alice knows:");        
+        
+        // 4.8        
+        Resource address = model.createResource("http://example.org/Address");
+        Property street = model.createProperty("http://example.org/street");
+        Property city = model.createProperty("http://example.org/city");
+        Property addressProp = model.createProperty("http://example.org/address");
+
+        address.addProperty(street, "Progreso")
+               .addProperty(city, "Ourense");
+
+        alice.addProperty(addressProp, address);
+
+        // 4.7
+        try (java.io.FileOutputStream out = new java.io.FileOutputStream("personas.ttl")) {
+            RDFDataMgr.write(out, model, org.apache.jena.riot.Lang.TURTLE);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

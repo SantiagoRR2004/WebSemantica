@@ -1,13 +1,30 @@
-@prefix schema: <http://schema.org/> .
-@prefix ex: <http://example.org/> .
+<http://example.org/persona/Bob>
+        <http://example.org/property/birthDate>
+                "1993-05-15";
+        <http://xmlns.com/foaf/0.1/age>
+                "30";
+        <http://xmlns.com/foaf/0.1/knows>
+                <http://example.org/persona/Alice> .
 
-ex:persona1 a schema:Person ;
-  schema:name "Juan Pérez" ;
-  schema:address ex:direccion1 ;
-  schema:birthDate "1990-05-15" .
+<http://example.org/Address>
+        <http://example.org/city>    "Ourense";
+        <http://example.org/street>  "Progreso" .
 
-ex:direccion1 a schema:PostalAddress ;
-  schema:streetAddress "Calle Falsa 123" ;
-  schema:addressLocality "Ourense" ;
-  schema:addressRegion "Ourense" ;
-  schema:postalCode "32001" .
+<http://example.org/persona/Charlie>
+        <http://xmlns.com/foaf/0.1/age>
+                "28";
+        <http://xmlns.com/foaf/0.1/knows>
+                <http://example.org/persona/Alice> .
+
+<http://example.org/persona/Alice>
+        <http://example.org/address>  <http://example.org/Address>;
+        <http://example.org/property/height>
+                "1.65"^^<http://www.w3.org/2001/XMLSchema#double>;
+        <http://xmlns.com/foaf/0.1/age>
+                "23";
+        <http://xmlns.com/foaf/0.1/knows>
+                <http://example.org/persona/Bob>;
+        <http://xmlns.com/foaf/0.1/mbox>
+                "<mailto:alice@example.org>";
+        <http://xmlns.com/foaf/0.1/name>
+                "Alice" .
