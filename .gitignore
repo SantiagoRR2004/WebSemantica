@@ -1,0 +1,6 @@
+# From maven
+target/
+
+# From the RDF creator
+*Graph*.json
+rdfCreator/*.ttl
