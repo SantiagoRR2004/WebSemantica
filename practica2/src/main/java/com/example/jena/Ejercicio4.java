@@ -64,9 +64,28 @@ public class Ejercicio4 {
         // 4.6
         alice.addProperty(FOAF.knows, bob);
         charlie.addProperty(FOAF.knows, alice);
+        charlie.addProperty(FOAF.name, "Charlie");
+        bob.addProperty(FOAF.name, "Bob");
 
         model.write(System.out, "TURTLE");
-        System.out.println("Alice knows:");        
+        System.out.println("Each one knows:");
+
+        StmtIterator iter2 = model.listStatements();
+        while (iter2.hasNext()) {
+            Statement stmt = iter2.nextStatement();
+            Resource subject = stmt.getSubject();
+            if (subject.hasProperty(FOAF.knows)) {
+                System.out.print(subject.getProperty(FOAF.name).getObject() + " knows: ");
+                StmtIterator knowsIter = subject.listProperties(FOAF.knows);
+                while (knowsIter.hasNext()) {
+                    Statement knowsStmt = knowsIter.nextStatement();
+                    Resource knowsResource = knowsStmt.getObject().asResource();
+                    System.out.print(knowsResource.getProperty(FOAF.name).getObject() + " ");
+            
+                }
+                System.out.println();
+            }
+        }
         
         // 4.8        
         Resource address = model.createResource("http://example.org/Address");

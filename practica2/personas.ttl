@@ -4,7 +4,9 @@
         <http://xmlns.com/foaf/0.1/age>
                 "30";
         <http://xmlns.com/foaf/0.1/knows>
-                <http://example.org/persona/Alice> .
+                <http://example.org/persona/Alice>;
+        <http://xmlns.com/foaf/0.1/name>
+                "Bob" .
 
 <http://example.org/Address>
         <http://example.org/city>    "Ourense";
@@ -14,7 +16,9 @@
         <http://xmlns.com/foaf/0.1/age>
                 "28";
         <http://xmlns.com/foaf/0.1/knows>
-                <http://example.org/persona/Alice> .
+                <http://example.org/persona/Alice>;
+        <http://xmlns.com/foaf/0.1/name>
+                "Charlie" .
 
 <http://example.org/persona/Alice>
         <http://example.org/address>  <http://example.org/Address>;
