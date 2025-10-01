@@ -105,5 +105,10 @@ public class Ejercicio4 {
             e.printStackTrace();
         }
 
+        // Load the model from the file
+        Model model2 = ModelFactory.createDefaultModel();
+        RDFDataMgr.read(model2, "personas.ttl");
+        model2.write(System.out, "TURTLE");
+
     }
 }
