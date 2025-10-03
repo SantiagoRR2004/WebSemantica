@@ -1,14 +1,17 @@
 package com.example.jena;
 
+import java.nio.file.Paths;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.RDFDataMgr;
 
 public class Ejemplo8 extends Object {
-    
-    static final String inputFileName1 = "practica3/vc-db-3.rdf";    
-    static final String inputFileName2 = "practica3/vc-db-4.rdf";
-    
+
+    // Calculate absolute path dynamically
+    static final String inputFileName1 = Paths.get(System.getProperty("user.dir"), "vc-db-3.rdf").toString();
+    static final String inputFileName2 = Paths.get(System.getProperty("user.dir"), "vc-db-4.rdf").toString();
+
     public static void main (String args[]) {
         // 1. Crear dos modelos vacíos
         Model model1 = ModelFactory.createDefaultModel();

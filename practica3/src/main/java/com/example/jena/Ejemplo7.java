@@ -1,12 +1,15 @@
 package com.example.jena;
 
+import java.nio.file.Paths;
+
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.vocabulary.FOAF;
 
 public class Ejemplo7 extends Object {
-    
-    static final String inputFileName = "practica3/vc-db-1.rdf";
+
+    // Calculate absolute path dynamically
+    static final String inputFileName = Paths.get(System.getProperty("user.dir"), "vc-db-1.rdf").toString();
     
     public static void main (String args[]) {
         // 1. Crear un modelo vacío
