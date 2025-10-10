@@ -30,3 +30,10 @@
 <> a foaf:Document ;
 	foaf:name "Santa's profile"@en;
 	foaf:primaryTopic <#yo> .
+
+INSERT {
+  <#yo> foaf:knows ?person .
+}
+WHERE {
+  ?person a foaf:Person .
+}
