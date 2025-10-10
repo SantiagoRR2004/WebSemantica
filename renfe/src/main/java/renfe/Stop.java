@@ -1,12 +1,12 @@
 package renfe;
 
 public class Stop {
-    private String stopId;
+    private String stopId; // Important
     private String stopCode;
-    private String stopName;
+    private String stopName; // Important
     private String stopDesc;
-    private String stopLat;
-    private String stopLon;
+    private Float stopLat; // Important
+    private Float stopLon; // Important
     private String zoneId;
     private String stopUrl;
     private String locationType;
@@ -20,8 +20,8 @@ public class Stop {
         this.stopCode = csvData[1];
         this.stopName = csvData[2];
         this.stopDesc = csvData[3];
-        this.stopLat = csvData[4];
-        this.stopLon = csvData[5];
+        this.stopLat = Float.parseFloat(csvData[4]);
+        this.stopLon = Float.parseFloat(csvData[5]);
         this.zoneId = csvData[6];
         this.stopUrl = csvData[7];
         this.locationType = csvData[8];
@@ -33,8 +33,8 @@ public class Stop {
     // Getters y setters
     public String getStopId() { return stopId; }
     public String getStopName() { return stopName; }
-    public String getStopLat() { return stopLat; }
-    public String getStopLon() { return stopLon; }
+    public Float getStopLat() { return stopLat; }
+    public Float getStopLon() { return stopLon; }
     
     @Override
     public String toString() {
