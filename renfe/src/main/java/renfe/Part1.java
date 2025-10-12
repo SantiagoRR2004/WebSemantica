@@ -2,7 +2,9 @@ package renfe;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.jena.rdf.model.Bag;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
@@ -16,6 +18,13 @@ public class Part1 {
 
     public static void main(String[] args) {
         List<Stop> stops = CSVReader.parseStops(inputFileName);
+        // Add more information and use containers
+        // Most headers of stops.txt are without information
+        // So we are going to use stop_times.txt
+
+        Map<String, List<StopTime>> stopTimes = CSVReader
+                .parseStopTimes(Paths.get(System.getProperty("user.dir"), "data", "stop_times.txt").toString());
+
         Model model = ModelFactory.createDefaultModel();
 
         // Define namespaces/prefixes
@@ -41,6 +50,22 @@ public class Part1 {
                     stop.getStopLon());
             stopResource.addProperty(model.createProperty(rdfsNS + "label"),
                     stop.getStopName());
+
+            // Add stop times information in a bag
+            if (stopTimes.containsKey(stop.getStopId())) {
+                List<StopTime> times = stopTimes.get(stop.getStopId());
+                Bag bag = model.createBag();
+                for (StopTime time : times) {
+                    Resource timeResource = model.createResource();
+                    timeResource.addProperty(model.createProperty(exNS + "tripId"),
+                            time.getTripId() + "-" + time.getStopSequence());
+                    timeResource.addProperty(model.createProperty(exNS + "arrivalTime"), time.getArrivalTime());
+                    timeResource.addProperty(model.createProperty(exNS + "departureTime"), time.getDepartureTime());
+                    timeResource.addProperty(model.createProperty(exNS + "stopSequence"), time.getStopSequence());
+                    bag.add(timeResource);
+                }
+                stopResource.addProperty(model.createProperty(exNS + "hasStopTimes"), bag);
+            }
         }
         model.write(System.out, "TURTLE");
 
@@ -50,6 +75,5 @@ public class Part1 {
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
-
     }
 }
