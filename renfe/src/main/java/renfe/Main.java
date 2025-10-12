@@ -1,12 +1,17 @@
 package renfe;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.vocabulary.RDF;
 
 public class Main {
+
+    static final String outputFileName = Paths.get(System.getProperty("user.dir"), "renfe.ttl").toString();
+
     public static void main(String[] args) {
         String csvFile = "data/stops.txt";
         List<Stop> stops = CSVReader.parseStops(csvFile);
@@ -22,5 +27,13 @@ public class Main {
             model.write(System.out, "TURTLE");
         }
         model.write(System.out, "TURTLE");
+
+        // Save the file
+        try (java.io.FileOutputStream out = new java.io.FileOutputStream(outputFileName)) {
+            RDFDataMgr.write(out, model, org.apache.jena.riot.Lang.TURTLE);
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
