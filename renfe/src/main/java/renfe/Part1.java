@@ -8,13 +8,13 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.vocabulary.RDF;
 
-public class Main {
+public class Part1 {
 
+    static final String inputFileName = Paths.get(System.getProperty("user.dir"), "data", "stops.txt").toString();
     static final String outputFileName = Paths.get(System.getProperty("user.dir"), "renfe.ttl").toString();
 
     public static void main(String[] args) {
-        String csvFile = "data/stops.txt";
-        List<Stop> stops = CSVReader.parseStops(csvFile);
+        List<Stop> stops = CSVReader.parseStops(inputFileName);
         Model model = ModelFactory.createDefaultModel();
         //  http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing
 
