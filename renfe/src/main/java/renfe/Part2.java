@@ -1,12 +1,11 @@
 package renfe;
+
 import java.nio.file.Paths;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.riot.RDFDataMgr;
 
@@ -36,7 +35,7 @@ public class Part2 {
 
         // Get all subjects that have the type SpatialThing
         ResIterator iter = model.listResourcesWithProperty(typeProperty, spatialThingType);
-        
+
         while (iter.hasNext()) {
             Resource subject = iter.nextResource();
 

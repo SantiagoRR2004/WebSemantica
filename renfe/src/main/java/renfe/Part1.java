@@ -1,4 +1,5 @@
 package renfe;
+
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -16,15 +17,30 @@ public class Part1 {
     public static void main(String[] args) {
         List<Stop> stops = CSVReader.parseStops(inputFileName);
         Model model = ModelFactory.createDefaultModel();
-        //  http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing
+
+        // Define namespaces/prefixes
+        String exNS = "http://www.ejemplo.com/";
+        String geoNS = "http://www.w3.org/2003/01/geo/wgs84_pos#";
+        String rdfsNS = "http://www.w3.org/2000/01/rdf-schema#";
+        String xsdNS = "http://www.w3.org/2001/XMLSchema#";
+
+        // Set prefixes for Turtle output
+        // https://jena.apache.org/documentation/javadoc/jena/org.apache.jena.core/org/apache/jena/shared/PrefixMapping.html
+        model.setNsPrefix("ex", exNS);
+        model.setNsPrefix("geo", geoNS);
+        model.setNsPrefix("rdfs", rdfsNS);
+        model.setNsPrefix("xsd", xsdNS);
 
         for (Stop stop : stops) {
-            Resource stopResource = model.createResource("http://example.org/stop/" + stop.getStopId());
-            stopResource.addProperty(RDF.type, model.createResource("http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"));
-            stopResource.addLiteral(model.createProperty("http://www.w3.org/2003/01/geo/wgs84_pos#lat"), stop.getStopLat());
-            stopResource.addLiteral(model.createProperty("http://www.w3.org/2003/01/geo/wgs84_pos#long"), stop.getStopLon());
-            stopResource.addProperty(model.createProperty("http://www.w3.org/2000/01/rdf-schema#label"), stop.getStopName());
-            model.write(System.out, "TURTLE");
+            Resource stopResource = model.createResource(exNS + stop.getStopId());
+            stopResource.addProperty(RDF.type,
+                    model.createResource(geoNS + "SpatialThing"));
+            stopResource.addLiteral(model.createProperty(geoNS + "lat"),
+                    stop.getStopLat());
+            stopResource.addLiteral(model.createProperty(geoNS + "long"),
+                    stop.getStopLon());
+            stopResource.addProperty(model.createProperty(rdfsNS + "label"),
+                    stop.getStopName());
         }
         model.write(System.out, "TURTLE");
 
