@@ -1,0 +1,26 @@
+@base <https://github.com/Sergiooo0/FoafPerfil/blob/main/perfil.ttl> .
+
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ex: <http://ex.org/movie#> .
+@prefix wikidata: <http://www.wikidata.org/entity/> .
+
+<#yo> rdf:type foaf:Person;
+	foaf:name "Sergio González Rodríguez";
+	foaf:firstName "Sergio";
+	foaf:surname "González-Rodríguez";
+	foaf:birthday "01-05";
+	foaf:age 21;
+	foaf:gender "masculino"@es;
+	foaf:homepage <https://github.com/Sergiooo0>;
+	foaf:based_near <https://sws.geonames.org/3114965/> ;
+	foaf:interest wikidata:Q83462 , wikidata:Q7889, wikidata:Q28865;
+	ex:likesMovie wikidata:Q543064 , wikidata:Q190145, wikidata:Q679611;
+    foaf:knows <https://github.com/AdanAgr/WS/blob/main/adan.ttl> ,
+    <https://github.com/SantiagoRR2004/WebSemantica/tree/main/renfe/santaClaus.ttl> ,
+    <https://github.com/usbt0p/websem/blob/main/tomas.ttl#yo> ,
+    <https://github.com/usbt0p/websem/blob/main/lucas.ttl> .
+	
+<> a foaf:Document ;
+	foaf:name "Perfil FOAF de SergioGonzalezRodriguez"@es;
+	foaf:primaryTopic <#yo> .
