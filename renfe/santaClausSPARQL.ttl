@@ -4,6 +4,8 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix ex: <http://ex.org/movie#> .
 @prefix wikidata: <http://www.wikidata.org/entity/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
 
 <#yo> rdf:type foaf:Person;
 	foaf:name [
@@ -23,12 +25,15 @@
 	foaf:homepage <https://www.northpole.com/>;
 	foaf:based_near <https://www.geonames.org/6269203/north-pole.html>;
 	foaf:interest wikidata:Q184303 , wikidata:Q13266 , wikidata:Q19809;
-	ex:likesMovie wikidata:Q714721 , wikidata:Q497850 , wikidata:Q3281244;
-    foaf:knows <https://github.com/AdanAgr/WS/blob/main/adan.ttl#yo> ,
-	<https://github.com/Sergiooo0/FoafPerfil/blob/main/perfil.ttl#yo> ,
-    <https://github.com/usbt0p/websem/blob/main/tomas.ttl#yo> ,
-    <https://github.com/usbt0p/websem/blob/main/lucas.ttl#yo> .
+	ex:likesMovie wikidata:Q714721 , wikidata:Q497850 , wikidata:Q3281244.
 	
 <> a foaf:Document ;
 	foaf:name "Santa's profile"@en;
 	foaf:primaryTopic <#yo> .
+
+INSERT {
+  <#yo> foaf:knows ?person .
+}
+WHERE {
+  ?person a foaf:Person .
+}
