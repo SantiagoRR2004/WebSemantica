@@ -93,7 +93,8 @@ public class Main {
         Resource alicia = model.createResource(ex + "Alicia", alumnoGrado);
         Resource ws = model.createResource(ex + "WebSemantica", asignatura);
         Resource cuarto = model.createResource(ex + "4cursoGRIA", curso);
-
+        
+        // Exercise 7.2
         mr.addProperty(ensena, ws); // mr ensena ws
         mr.addProperty(evalua, alicia); // mr evalua alicia
         alicia.addProperty(matriculadoEn, ws);
