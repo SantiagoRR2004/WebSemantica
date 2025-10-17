@@ -117,5 +117,49 @@ public class Main {
             System.out.println(props.nextStatement());
         }
 
+        // add more istances:
+        Resource bob = model.createResource(ex + "Bob", alumno);
+        Resource ri = model.createResource(ex + "RecuperacionInformacion", asignaturaTeorica);
+        jf.addProperty(ensena, ri); // jf ensena ri
+        bob.addProperty(matriculadoEn, ri);
+        bob.addProperty(esMentorDe, alicia); // bob esMentorDe alicia
+        bob.addProperty(aprueba, ws);
+
+        InfModel infModel2 = ModelFactory.createInfModel(reasoner, model);
+        System.out.println("----- Statements inferred about Bob -----");
+        System.out.println("----- Types: -----");
+        StmtIterator iter2 = infModel2.listStatements(bob, RDF.type, (RDFNode) null);
+        while (iter2.hasNext()) {
+            System.out.println(iter2.nextStatement()); 
+        }
+        System.out.println("----- Properties: -----");
+        StmtIterator props2 = infModel2.listStatements(bob, null, (RDFNode) null);
+        while (props2.hasNext()) {
+            System.out.println(props2.nextStatement());
+        }
+
+        // Exercise 7.3: add a wrong property
+        bob.addProperty(ensena, ws);
+        InfModel infModel3 = ModelFactory.createInfModel(reasoner, model);
+        System.out.println("----- Statements inferred about Bob after adding a wrong property -----");
+        System.out.println("----- Types: -----");
+        StmtIterator iter3 = infModel3.listStatements(bob, RDF.type, (RDFNode) null);
+        while (iter3.hasNext()) {
+            System.out.println(iter3.nextStatement());
+        }
+        // makes bob a profesor by the wrong property added
+
+        // Exercise 7.4: write infer model in Turtle format
+        System.out.println("----- Model in Turtle format -----");
+        infModel3.write(System.out, "TURTLE");
+
+        // Exercise 7.5: print properties of Alice to check it inferences participaEn
+        System.out.println("----- Statements inferred about Alicia -----");
+        System.out.println("----- Properties: -----");
+        StmtIterator props3 = infModel3.listStatements(alicia, null, (RDFNode) null);
+        while (props3.hasNext()) {
+            System.out.println(props3.nextStatement());
+        }
+
     }
 }
