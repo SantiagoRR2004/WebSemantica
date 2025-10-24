@@ -9,8 +9,9 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.XSD;
 
-public class Main {
+public class Part1 {
     static final String outputFileName = Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();  
     public static void main(String[] args) {
         Model model = ModelFactory.createDefaultModel();
@@ -45,31 +46,31 @@ public class Main {
         Resource homer = model.createResource(simNs + "HomerSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Homer Simpson")
-                .addLiteral(FOAF.age, 36);
+                .addProperty(FOAF.age, model.createTypedLiteral("36", XSD.xint.getURI()));
         Resource marge = model.createResource(simNs + "MargeSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Marge Simpson")
-                .addLiteral(FOAF.age, 34);
+                .addProperty(FOAF.age, model.createTypedLiteral("34", XSD.xint.getURI()));
         Resource bart = model.createResource(simNs + "BartSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Bart Simpson")
-                .addLiteral(FOAF.age, 10);
+                .addProperty(FOAF.age, model.createTypedLiteral("10", XSD.xint.getURI()));
         Resource lisa = model.createResource(simNs + "LisaSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Lisa Simpson")
-                .addLiteral(FOAF.age, 8);
+                .addProperty(FOAF.age, model.createTypedLiteral("8", XSD.xint.getURI()));
         Resource maggie = model.createResource(simNs + "MaggieSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Maggie Simpson")
-                .addLiteral(FOAF.age, 1);
+                .addProperty(FOAF.age, model.createTypedLiteral("1", XSD.xint.getURI()));
         Resource abe = model.createResource(simNs + "AbeSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Abe Simpson")
-                .addLiteral(FOAF.age, 87);
+                .addProperty(FOAF.age, model.createTypedLiteral("87", XSD.xint.getURI()));
         Resource mona = model.createResource(simNs + "MonaSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Mona Simpson")
-                .addLiteral(FOAF.age, 87);
+                .addProperty(FOAF.age, model.createTypedLiteral("87", XSD.xint.getURI()));
         
 
         // Define hasMemberFamily relationships
