@@ -85,7 +85,31 @@ public class Part1 {
                 .addProperty(FOAF.name, "Mona Simpson")
                 .addProperty(gender, femaleClass)
                 .addProperty(FOAF.age, model.createTypedLiteral("87", XSD.xint.getURI()));
-        
+        Resource clancyBouvier = model.createResource(simNs + "ClancyBouvier")
+                .addProperty(RDF.type, FOAF.Person)
+                .addProperty(FOAF.name, "Clancy Bouvier")
+                .addProperty(gender, maleClass)
+                .addProperty(FOAF.age, model.createTypedLiteral("67", XSD.xint.getURI()));
+        Resource jacquelineBouvier = model.createResource(simNs + "JacquelineBouvier")
+                .addProperty(RDF.type, FOAF.Person)
+                .addProperty(FOAF.name, "Jacqueline Bouvier")
+                .addProperty(gender, femaleClass)
+                .addProperty(FOAF.age, model.createTypedLiteral("80", XSD.xint.getURI()));
+        Resource pattyBouvier = model.createResource(simNs + "PattyBouvier")
+                .addProperty(RDF.type, FOAF.Person)
+                .addProperty(FOAF.name, "Patty Bouvier")
+                .addProperty(gender, femaleClass)
+                .addProperty(FOAF.age, model.createTypedLiteral("41", XSD.xint.getURI()));
+        Resource selmaBouvier = model.createResource(simNs + "SelmaBouvier")
+                .addProperty(RDF.type, FOAF.Person)
+                .addProperty(FOAF.name, "Selma Bouvier")
+                .addProperty(gender, femaleClass)
+                .addProperty(FOAF.age, model.createTypedLiteral("41", XSD.xint.getURI()));
+        Resource herbPowell = model.createResource(simNs + "HerbPowell")
+                .addProperty(RDF.type, FOAF.Person)
+                .addProperty(FOAF.name, "Herb Powell")
+                .addProperty(gender, maleClass)
+                .addProperty(FOAF.age, model.createTypedLiteral("50", XSD.xint.getURI()));
 
         // Define hasMemberFamily relationships
         simpsonFamily.addProperty(hasMemberFamily, homer);
@@ -95,6 +119,10 @@ public class Part1 {
         simpsonFamily.addProperty(hasMemberFamily, maggie);
         simpsonFamily.addProperty(hasMemberFamily, abe);
         simpsonFamily.addProperty(hasMemberFamily, mona);
+        simpsonFamily.addProperty(hasMemberFamily, clancyBouvier);
+        simpsonFamily.addProperty(hasMemberFamily, jacquelineBouvier);
+        simpsonFamily.addProperty(hasMemberFamily, pattyBouvier);
+        simpsonFamily.addProperty(hasMemberFamily, selmaBouvier);
 
         // Homer relationships
         homer.addProperty(hasSpouse, marge);
@@ -103,6 +131,8 @@ public class Part1 {
 
         // Marge relationships
         marge.addProperty(hasSpouse, homer);
+        marge.addProperty(hasFather, clancyBouvier);
+        marge.addProperty(hasMother, jacquelineBouvier);
 
         // Abe relationships
         abe.addProperty(hasSpouse, mona);
@@ -124,6 +154,27 @@ public class Part1 {
         maggie.addProperty(hasMother, marge);
         maggie.addProperty(hasBrother, bart);
         maggie.addProperty(hasSister, lisa);
+
+        // Clancy Bouvier relationships
+        clancyBouvier.addProperty(hasSpouse, jacquelineBouvier);
+
+        // Jacqueline Bouvier relationships
+        jacquelineBouvier.addProperty(hasSpouse, clancyBouvier);
+
+        // Patty Bouvier relationships
+        pattyBouvier.addProperty(hasSister, selmaBouvier);
+        pattyBouvier.addProperty(hasSister, marge);
+        pattyBouvier.addProperty(hasFather, clancyBouvier);
+        pattyBouvier.addProperty(hasMother, jacquelineBouvier);
+
+        // Selma Bouvier relationships
+        selmaBouvier.addProperty(hasSister, pattyBouvier);
+        selmaBouvier.addProperty(hasSister, marge);
+        selmaBouvier.addProperty(hasFather, clancyBouvier);
+        selmaBouvier.addProperty(hasMother, jacquelineBouvier);
+
+        // Herb Powell relationships
+        herbPowell.addProperty(hasFather, abe);
 
         // Save the file
         try(java.io.FileOutputStream out = new java.io.FileOutputStream(outputFileName)) {
