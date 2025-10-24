@@ -27,16 +27,23 @@ public class Part1 {
         model.setNsPrefix("xsd", xsdNs);
         model.setNsPrefix("sim", simNs);
 
-        // Create class family:
+        // Create classes
         Resource familyClass = model.createResource(familyNs + "Family");
+        Resource genderClass = model.createResource(familyNs + "Gender");
+        Resource maleClass = model.createResource(familyNs + "Masc");
+        Resource femaleClass = model.createResource(familyNs + "Fem");
+
         // Create properties
         Property hasMemberFamily = model.createProperty(familyNs + "hasMemberFamily");
+        Property hasSiblings = model.createProperty(familyNs + "hasSiblings");
         Property hasBrother = model.createProperty(familyNs + "hasBrother");
         Property hasSister = model.createProperty(familyNs + "hasSister");
         Property hasProgenitor = model.createProperty(familyNs + "hasProgenitor");
         Property hasFather = model.createProperty(familyNs + "hasFather");
         Property hasMother = model.createProperty(familyNs + "hasMother");
         Property hasSpouse = model.createProperty(familyNs + "hasSpouse");
+        Property gender = model.createProperty(foafNs + "gender");
+        Property isRelatedTo = model.createProperty(foafNs + "isRelatedTo");
         
         // Create family Simpson
         Resource simpsonFamily = model.createResource(simNs + "SimpsonFamily")
@@ -46,30 +53,37 @@ public class Part1 {
         Resource homer = model.createResource(simNs + "HomerSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Homer Simpson")
+                .addProperty(gender, maleClass)
                 .addProperty(FOAF.age, model.createTypedLiteral("36", XSD.xint.getURI()));
         Resource marge = model.createResource(simNs + "MargeSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Marge Simpson")
+                .addProperty(gender, femaleClass)
                 .addProperty(FOAF.age, model.createTypedLiteral("34", XSD.xint.getURI()));
         Resource bart = model.createResource(simNs + "BartSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Bart Simpson")
+                .addProperty(gender, maleClass)
                 .addProperty(FOAF.age, model.createTypedLiteral("10", XSD.xint.getURI()));
         Resource lisa = model.createResource(simNs + "LisaSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Lisa Simpson")
+                .addProperty(gender, femaleClass)
                 .addProperty(FOAF.age, model.createTypedLiteral("8", XSD.xint.getURI()));
         Resource maggie = model.createResource(simNs + "MaggieSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Maggie Simpson")
+                .addProperty(gender, femaleClass)
                 .addProperty(FOAF.age, model.createTypedLiteral("1", XSD.xint.getURI()));
         Resource abe = model.createResource(simNs + "AbeSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Abe Simpson")
+                .addProperty(gender, maleClass)
                 .addProperty(FOAF.age, model.createTypedLiteral("87", XSD.xint.getURI()));
         Resource mona = model.createResource(simNs + "MonaSimpson")
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, "Mona Simpson")
+                .addProperty(gender, femaleClass)
                 .addProperty(FOAF.age, model.createTypedLiteral("87", XSD.xint.getURI()));
         
 
