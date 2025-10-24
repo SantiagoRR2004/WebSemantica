@@ -7,3 +7,6 @@ rdfCreator/*.ttl
 
 # Renfe project
 renfe/renfe.ttl
+
+# Simpson project
+simpson/simpson.ttl
