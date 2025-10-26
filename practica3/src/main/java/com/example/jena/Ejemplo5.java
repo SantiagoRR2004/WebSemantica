@@ -1,38 +1,36 @@
 package com.example.jena;
 
 import java.nio.file.Paths;
-
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.sparql.vocabulary.FOAF;
 
-
-/** Ejemplo 5 - selecting the resources
- */
+/** Ejemplo 5 - selecting the resources */
 public class Ejemplo5 extends Object {
 
-    // Calculate absolute path dynamically
-    static final String inputFileName = Paths.get(System.getProperty("user.dir"), "vc-db-1.rdf").toString();
-    
-    public static void main (String args[]) {
-        // 1. Crear un modelo vacío
-        Model model = ModelFactory.createDefaultModel();
+  // Calculate absolute path dynamically
+  static final String inputFileName =
+      Paths.get(System.getProperty("user.dir"), "vc-db-1.rdf").toString();
 
-        // 2. Leer el archivo RDF
-        RDFDataMgr.read(model, inputFileName);
+  public static void main(String args[]) {
+    // 1. Crear un modelo vacío
+    Model model = ModelFactory.createDefaultModel();
 
-        // 3. Seleccionar todos los sujetos con la propiedad foaf:name
-        ResIterator iter = model.listSubjectsWithProperty(FOAF.name);
+    // 2. Leer el archivo RDF
+    RDFDataMgr.read(model, inputFileName);
 
-        if (iter.hasNext()) {
-            System.out.println("La base de conocimiento contiene las siguientes personas:");
-            while (iter.hasNext()) {
-                Resource person = iter.nextResource();
-                String fullName = person.getRequiredProperty(FOAF.name).getString();
-                System.out.println("  " + fullName);
-            }
-        } else {
-            System.out.println("No se encontraron personas en la base de conocimiento");
-        }         
+    // 3. Seleccionar todos los sujetos con la propiedad foaf:name
+    ResIterator iter = model.listSubjectsWithProperty(FOAF.name);
+
+    if (iter.hasNext()) {
+      System.out.println("La base de conocimiento contiene las siguientes personas:");
+      while (iter.hasNext()) {
+        Resource person = iter.nextResource();
+        String fullName = person.getRequiredProperty(FOAF.name).getString();
+        System.out.println("  " + fullName);
+      }
+    } else {
+      System.out.println("No se encontraron personas en la base de conocimiento");
     }
+  }
 }
