@@ -1,0 +1,21 @@
+[fatherIsProgenitor:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasFather> ?y)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?y)
+]
+
+[motherIsProgenitor:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasMother> ?y)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?y)
+]
+
+[progenitorIsFather:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?y),
+    (?y <http://xmlns.com/foaf/0.1/gender> <http://www.esei.uvigo.es/ws/familia#Masc>)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasFather> ?y)
+]
+
+[progenitorIsMother:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?y),
+    (?y <http://xmlns.com/foaf/0.1/gender> <http://www.esei.uvigo.es/ws/familia#Fem>)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasMother> ?y)
+]
