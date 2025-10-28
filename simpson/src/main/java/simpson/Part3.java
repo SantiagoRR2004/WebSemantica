@@ -16,9 +16,10 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.shared.PrefixMapping;
 
 public class Part3 {
-  static final String inputFileName = Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
-  static final String progenitorRules = Paths.get(System.getProperty("user.dir"), "rules", "progenitor.rules")
-      .toString();
+  static final String inputFileName =
+      Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
+  static final String progenitorRules =
+      Paths.get(System.getProperty("user.dir"), "rules", "progenitor.rules").toString();
 
   static final int width = 80;
 
@@ -66,16 +67,13 @@ public class Part3 {
     StringBuilder line = new StringBuilder(" ".repeat(width));
 
     // Left align `s`
-    if (sWidth <= width)
-      line.replace(0, Math.min(sWidth, width), s);
+    if (sWidth <= width) line.replace(0, Math.min(sWidth, width), s);
 
     // Center align `p`
-    if (pStart + pWidth <= width)
-      line.replace(pStart, pStart + pWidth, p);
+    if (pStart + pWidth <= width) line.replace(pStart, pStart + pWidth, p);
 
     // Right align `o`
-    if (oStart + oWidth <= width)
-      line.replace(oStart, oStart + oWidth, o);
+    if (oStart + oWidth <= width) line.replace(oStart, oStart + oWidth, o);
 
     System.out.println(line.toString());
   }
@@ -109,5 +107,4 @@ public class Part3 {
       printAligned(s, p, o);
     }
   }
-
 }
