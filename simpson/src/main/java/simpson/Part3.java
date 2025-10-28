@@ -1,7 +1,7 @@
 package simpson;
 
 import java.nio.file.Paths;
-
+import java.util.List;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -15,11 +15,11 @@ import org.apache.jena.reasoner.rulesys.Rule;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.shared.PrefixMapping;
 
-import java.util.List;
-
 public class Part3 {
-  static final String inputFileName = Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
-  static final String progenitorRules = Paths.get(System.getProperty("user.dir"), "rules", "progenitor.rules").toString();
+  static final String inputFileName =
+      Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
+  static final String progenitorRules =
+      Paths.get(System.getProperty("user.dir"), "rules", "progenitor.rules").toString();
 
   public static void main(String[] args) {
     // Create an empty model
@@ -93,7 +93,6 @@ public class Part3 {
 
       printAligned(s, p, o, 80);
     }
-
   }
 
   static void printAligned(String s, String p, String o, int width) {
@@ -112,18 +111,14 @@ public class Part3 {
     StringBuilder line = new StringBuilder(" ".repeat(width));
 
     // Left align `s`
-    if (sWidth <= width)
-      line.replace(0, Math.min(sWidth, width), s);
+    if (sWidth <= width) line.replace(0, Math.min(sWidth, width), s);
 
     // Center align `p`
-    if (pStart + pWidth <= width)
-      line.replace(pStart, pStart + pWidth, p);
+    if (pStart + pWidth <= width) line.replace(pStart, pStart + pWidth, p);
 
     // Right align `o`
-    if (oStart + oWidth <= width)
-      line.replace(oStart, oStart + oWidth, o);
+    if (oStart + oWidth <= width) line.replace(oStart, oStart + oWidth, o);
 
     System.out.println(line.toString());
   }
-
 }
