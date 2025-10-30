@@ -46,6 +46,8 @@ public class Part2 {
     masculine.addProperty(RDFS.subClassOf, gender);
     Resource feminine = model.getResource(familyNs + "Fem");
     feminine.addProperty(RDFS.subClassOf, gender);
+    Resource unknownGender = model.getResource(familyNs + "UnknownGender");
+    unknownGender.addProperty(RDFS.subClassOf, gender);
 
     // Set properties as Properties
     Property isRelatedTo = model.getProperty(foafNs + "isRelatedTo");

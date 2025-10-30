@@ -46,6 +46,7 @@ public class Part1 {
     Resource genderClass = model.createResource(familyNs + "Gender");
     Resource maleClass = model.createResource(familyNs + "Masc");
     Resource femaleClass = model.createResource(familyNs + "Fem");
+    Resource UnknownGenderClass = model.createResource(familyNs + "UnknownGender");
 
     // Create properties
     Property hasMemberFamily = model.createProperty(familyNs + "hasMemberFamily");
@@ -104,11 +105,7 @@ public class Part1 {
         } else {
           // Choose a random gender
           System.out.println("Gender not found");
-          if (Math.random() < 0.5) {
-            model.add(person, gender, maleClass);
-          } else {
-            model.add(person, gender, femaleClass);
-          }
+          model.add(person, gender, UnknownGenderClass);
         }
 
         // Age
@@ -200,7 +197,7 @@ public class Part1 {
         Elements children = extractLinksFor(relativesElement, "Children:");
         for (Element link : children) {
 
-          // Remove the %22
+          // Remove %22 and other similar
           String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
 
           // We do not add the child, we just add it to the list to be processed later
