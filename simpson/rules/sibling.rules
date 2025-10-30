@@ -1,0 +1,34 @@
+[hasSiblings:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?z),
+    (?y <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?z),
+    notEqual(?x, ?y)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?y),
+    (?y <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?x)
+]
+
+[hasSiblingsBidirectional:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?y)
+    -> (?y <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?x)
+]
+
+[hasBrother:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?y),
+    (?y <http://www.esei.uvigo.es/ws/familia#hasGender> <http://www.esei.uvigo.es/ws/familia#Masc>)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasBrother> ?y)
+]
+
+[hasBrotherR:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasBrother> ?y),
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?y)
+]
+
+[hasSister:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?y),
+    (?y <http://www.esei.uvigo.es/ws/familia#hasGender> <http://www.esei.uvigo.es/ws/familia#Fem>)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasSister> ?y)
+]
+
+[hasSisterR:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasSister> ?y),
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?y)
+]

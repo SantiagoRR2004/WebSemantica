@@ -19,4 +19,34 @@ These are the ones that appear just by applying RDFS reasoning. There are some t
 - `fam:hasGender rdfs:subPropertyOf fam:hasGender`. Every property will be `rdfs:subPropertyOf` of itself.
 - `foaf:Person rdfs:subClassOf rdfs:Resource`. Every class will be `rdfs:subClassOf` of `rdfs:Resource`.
 
+### [Related Rules Inferences](./rules/related.rules)
+
+Because to be related to someone, you just need to be in the same family, this rule infers that every character is related to all other characters because we only have one family. This is an example:
+
+- `sim:TrixieStemple fam:isRelatedTo sim:WainwrightMontgomeryBurns`
+
 ### [Progenitor Rules Inferences](./rules/progenitor.rules)
+
+These are 2 bidirectional rules that say that if you have a male progenitor, that person is your father, and if you have a female progenitor, that person is your mother. Examples of these inferences are:
+
+- `sim:BartSimpson fam:hasFather sim:HomerSimpson`
+- `sim:BartSimpson fam:hasMother sim:MargeSimpson`
+- `sim:HomerSimpson fam:hasFather sim:AbeSimpsonII`
+- `sim:HomerSimpson fam:hasMother sim:MonaSimpson`
+
+### [Sibling Rules Inferences](./rules/sibling.rules)
+
+These rules infer sibling relationships based on shared progenitors. If two individuals share the same father or mother, they are inferred to be siblings. If a sibling is male, they are inferred to be a brother; if female, a sister. Examples of these inferences are:
+
+- `sim:MaggieSimpson fam:hasBrother sim:BartSimpson`
+- `sim:MaggieSimpson fam:hasSister sim:LisaSimpson`
+- `sim:MaggieSimpson fam:hasSiblings sim:LisaSimpson`
+- `sim:MaggieSimpson fam:hasSiblings sim:BartSimpson`
+- `sim:LisaSimpson fam:hasBrother sim:BartSimpson`
+- `sim:LisaSimpson fam:hasSister sim:MaggieSimpson`
+- `sim:LisaSimpson fam:hasSiblings sim:MaggieSimpson`
+- `sim:LisaSimpson fam:hasSiblings sim:BartSimpson`
+- `sim:BartSimpson fam:hasSister sim:MaggieSimpson`
+- `sim:BartSimpson fam:hasSister sim:LisaSimpson`
+- `sim:BartSimpson fam:hasSiblings sim:MaggieSimpson`
+- `sim:BartSimpson fam:hasSiblings sim:LisaSimpson`

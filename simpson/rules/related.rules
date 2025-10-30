@@ -1,0 +1,6 @@
+[isRelatedTo:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasMemberFamily> ?y),
+    (?x <http://www.esei.uvigo.es/ws/familia#hasMemberFamily> ?z)
+    -> (?z <http://www.esei.uvigo.es/ws/familia#isRelatedTo> ?y),
+    (?y <http://www.esei.uvigo.es/ws/familia#isRelatedTo> ?z)
+]
