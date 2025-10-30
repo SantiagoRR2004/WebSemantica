@@ -38,7 +38,7 @@ public class Part2 {
     person.addProperty(RDF.type, RDFS.Class);
 
     // Get Gender
-    Resource gender = model.getResource(foafNs + "Gender");
+    Resource gender = model.getResource(familyNs + "Gender");
     gender.addProperty(RDF.type, RDFS.Class);
 
     // Get masculine and feminine
@@ -50,8 +50,8 @@ public class Part2 {
     unknownGender.addProperty(RDFS.subClassOf, gender);
 
     // Set properties as Properties
-    Property isRelatedTo = model.getProperty(foafNs + "isRelatedTo");
-    Property hasGender = model.getProperty(foafNs + "hasGender");
+    Property isRelatedTo = model.getProperty(familyNs + "isRelatedTo");
+    Property hasGender = model.getProperty(familyNs + "hasGender");
     Property hasMemberFamily = model.getProperty(familyNs + "hasMemberFamily");
     Property hasSiblings = model.getProperty(familyNs + "hasSiblings");
     Property hasBrother = model.getProperty(familyNs + "hasBrother");

@@ -69,8 +69,8 @@ public class Part1 {
     Property hasFather = model.createProperty(familyNs + "hasFather");
     Property hasMother = model.createProperty(familyNs + "hasMother");
     Property hasSpouse = model.createProperty(familyNs + "hasSpouse");
-    Property gender = model.createProperty(foafNs + "gender");
-    Property isRelatedTo = model.createProperty(foafNs + "isRelatedTo");
+    Property hasGender = model.createProperty(familyNs + "hasGender");
+    Property isRelatedTo = model.createProperty(familyNs + "isRelatedTo");
 
     // Create family Simpson
     Resource simpsonFamily =
@@ -86,7 +86,7 @@ public class Part1 {
         String url = "https://simpsons.fandom.com" + list.get(i);
 
         String resourceName = url.substring(url.lastIndexOf("/") + 1);
-        System.out.println("Resource Name: " + resourceName.replaceAll("[^A-Za-z0-9_.-]", "_"));
+        System.out.println("Resource Name: " + resourceName.replace("_", " "));
 
         Resource person =
             model
@@ -111,13 +111,12 @@ public class Part1 {
         Element genderElement = infobox.selectFirst("[data-source=sex]");
         String foundGender = genderElement != null ? genderElement.text() : "Unknown";
         if (foundGender.strip().equals("Gender Male ♂")) {
-          model.add(person, gender, maleClass);
+          model.add(person, hasGender, maleClass);
         } else if (foundGender.strip().equals("Gender Female ♀")) {
-          model.add(person, gender, femaleClass);
+          model.add(person, hasGender, femaleClass);
         } else {
-          // Choose a random gender
           System.out.println("Gender not found");
-          model.add(person, gender, UnknownGenderClass);
+          model.add(person, hasGender, UnknownGenderClass);
         }
 
         // Age
