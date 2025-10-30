@@ -25,6 +25,15 @@ public class Part1 {
   static final String outputFileName =
       Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
 
+  // Dictionary of known Simpson characters and their ages
+  private static final java.util.Map<String, Integer> KNOWN_AGES = new java.util.HashMap<String, Integer>() {{
+    put("Homer_Simpson", 36);
+    put("Marge_Simpson", 34);
+    put("Bart_Simpson", 10);
+    put("Lisa_Simpson", 8);
+    put("Maggie_Simpson", 1);
+  }};
+
   public static void main(String[] args) {
     Model model = ModelFactory.createDefaultModel();
     String familyNs = "http://www.esei.uvigo.es/ws/familia#";
@@ -121,6 +130,13 @@ public class Part1 {
             age = Integer.parseInt(matcher.group());
           }
         }
+        
+        // If age not found on webpage, check the dictionary
+        if (age == -1 && KNOWN_AGES.containsKey(resourceName)) {
+          age = KNOWN_AGES.get(resourceName);
+          System.out.println("Using known age from dictionary: " + age);
+        }
+        
         person.addProperty(
             FOAF.age, model.createTypedLiteral(String.valueOf(age), XSD.xint.getURI()));
 
@@ -212,23 +228,6 @@ public class Part1 {
 
       i++;
     }
-
-    // Create members of the Simpson family
-    // Resource homer = model
-    // .createResource(simNs + "HomerSimpson")
-    // .addProperty(FOAF.age, model.createTypedLiteral("36", XSD.xint.getURI()));
-    // Resource marge = model
-    // .createResource(simNs + "MargeSimpson")
-    // .addProperty(FOAF.age, model.createTypedLiteral("34", XSD.xint.getURI()));
-    // Resource bart = model
-    // .createResource(simNs + "BartSimpson")
-    // .addProperty(FOAF.age, model.createTypedLiteral("10", XSD.xint.getURI()));
-    // Resource lisa = model
-    // .createResource(simNs + "LisaSimpson")
-    // .addProperty(FOAF.age, model.createTypedLiteral("8", XSD.xint.getURI()));
-    // Resource maggie = model
-    // .createResource(simNs + "MaggieSimpson")
-    // .addProperty(FOAF.age, model.createTypedLiteral("1", XSD.xint.getURI()));
 
     // Save the file
     try (java.io.FileOutputStream out = new java.io.FileOutputStream(outputFileName)) {
