@@ -2,6 +2,9 @@ package simpson;
 
 import java.nio.file.Paths;
 import java.util.List;
+
+import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -9,7 +12,6 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.reasoner.Reasoner;
-import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.reasoner.rulesys.GenericRuleReasoner;
 import org.apache.jena.reasoner.rulesys.Rule;
 import org.apache.jena.riot.RDFDataMgr;
@@ -32,22 +34,19 @@ public class Part3 {
 
   public static void main(String[] args) {
     // Create an empty model
-    Model model = ModelFactory.createDefaultModel();
+    OntModel baseModel = ModelFactory.createOntologyModel(OntModelSpec.RDFS_MEM_RDFS_INF);
 
     // Open the file
-    RDFDataMgr.read(model, inputFileName);
-
-    Reasoner reasoner = ReasonerRegistry.getRDFSReasoner();
-    InfModel infModel = ModelFactory.createInfModel(reasoner, model);
+    RDFDataMgr.read(baseModel, inputFileName);
 
     // Show the basic inferences
     System.out.println("-".repeat(length * 2 + " Basic Inferences ".length()));
     System.out.println("-".repeat(length) + " Basic Inferences " + "-".repeat(length));
     System.out.println("-".repeat(length * 2 + " Basic Inferences ".length()));
-    Model deductions = infModel.getDeductionsModel();
+    Model deductions = baseModel.getDeductionsModel();
 
     StmtIterator it = deductions.listStatements();
-    printIterator(it, infModel);
+    printIterator(it, baseModel);
 
     // Now the related rules
     System.out.println("-".repeat(length * 2 + " Related Rules Inferences ".length()));
@@ -56,7 +55,8 @@ public class Part3 {
     List<Rule> rules = Rule.rulesFromURL(relatedRules);
     Reasoner ruleReasoner = new GenericRuleReasoner(rules);
 
-    infModel = ModelFactory.createInfModel(ruleReasoner, model);
+    InfModel infModel = ModelFactory.createInfModel(ruleReasoner, baseModel);
+
     StmtIterator iter = infModel.getDeductionsModel().listStatements();
     printIterator(iter, infModel);
 
@@ -67,7 +67,7 @@ public class Part3 {
     rules = Rule.rulesFromURL(progenitorRules);
     ruleReasoner = new GenericRuleReasoner(rules);
 
-    infModel = ModelFactory.createInfModel(ruleReasoner, model);
+    infModel = ModelFactory.createInfModel(ruleReasoner, infModel);
 
     iter = infModel.getDeductionsModel().listStatements();
     printIterator(iter, infModel);
@@ -79,13 +79,13 @@ public class Part3 {
     rules = Rule.rulesFromURL(siblingRules);
     ruleReasoner = new GenericRuleReasoner(rules);
 
-    infModel = ModelFactory.createInfModel(ruleReasoner, model);
+    infModel = ModelFactory.createInfModel(ruleReasoner, infModel);
     iter = infModel.getDeductionsModel().listStatements();
     printIterator(iter, infModel);
 
     // Save the file
     try (java.io.FileOutputStream out = new java.io.FileOutputStream(outputFileName)) {
-      RDFDataMgr.write(out, model, org.apache.jena.riot.Lang.TURTLE);
+      RDFDataMgr.write(out, baseModel, org.apache.jena.riot.Lang.TURTLE);
     } catch (Exception e) {
       e.printStackTrace();
     }
