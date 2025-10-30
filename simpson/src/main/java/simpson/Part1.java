@@ -1,6 +1,14 @@
 package simpson;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
@@ -10,202 +18,236 @@ import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.XSD;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class Part1 {
-  static final String outputFileName =
-      Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
+    static final String outputFileName = Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
 
-  public static void main(String[] args) {
-    Model model = ModelFactory.createDefaultModel();
-    String familyNs = "http://www.esei.uvigo.es/ws/familia#";
-    String foafNs = "http://xmlns.com/foaf/0.1/";
-    String rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-    String xsdNs = "http://www.w3.org/2001/XMLSchema#";
-    String simNs = "http://www.esei.uvigo.es/ws/simpsons#";
+    public static void main(String[] args) {
+        Model model = ModelFactory.createDefaultModel();
+        String familyNs = "http://www.esei.uvigo.es/ws/familia#";
+        String foafNs = "http://xmlns.com/foaf/0.1/";
+        String rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+        String xsdNs = "http://www.w3.org/2001/XMLSchema#";
+        String simNs = "http://www.esei.uvigo.es/ws/simpsons#";
 
-    model.setNsPrefix("fam", familyNs);
-    model.setNsPrefix("foaf", foafNs);
-    model.setNsPrefix("rdf", rdfNs);
-    model.setNsPrefix("xsd", xsdNs);
-    model.setNsPrefix("sim", simNs);
+        model.setNsPrefix("fam", familyNs);
+        model.setNsPrefix("foaf", foafNs);
+        model.setNsPrefix("rdf", rdfNs);
+        model.setNsPrefix("xsd", xsdNs);
+        model.setNsPrefix("sim", simNs);
 
-    // Create classes
-    Resource familyClass = model.createResource(familyNs + "Family");
-    Resource genderClass = model.createResource(familyNs + "Gender");
-    Resource maleClass = model.createResource(familyNs + "Masc");
-    Resource femaleClass = model.createResource(familyNs + "Fem");
+        // Create classes
+        Resource familyClass = model.createResource(familyNs + "Family");
+        Resource genderClass = model.createResource(familyNs + "Gender");
+        Resource maleClass = model.createResource(familyNs + "Masc");
+        Resource femaleClass = model.createResource(familyNs + "Fem");
 
-    // Create properties
-    Property hasMemberFamily = model.createProperty(familyNs + "hasMemberFamily");
-    Property hasSiblings = model.createProperty(familyNs + "hasSiblings");
-    Property hasBrother = model.createProperty(familyNs + "hasBrother");
-    Property hasSister = model.createProperty(familyNs + "hasSister");
-    Property hasProgenitor = model.createProperty(familyNs + "hasProgenitor");
-    Property hasFather = model.createProperty(familyNs + "hasFather");
-    Property hasMother = model.createProperty(familyNs + "hasMother");
-    Property hasSpouse = model.createProperty(familyNs + "hasSpouse");
-    Property gender = model.createProperty(foafNs + "gender");
-    Property isRelatedTo = model.createProperty(foafNs + "isRelatedTo");
+        // Create properties
+        Property hasMemberFamily = model.createProperty(familyNs + "hasMemberFamily");
+        Property hasSiblings = model.createProperty(familyNs + "hasSiblings");
+        Property hasBrother = model.createProperty(familyNs + "hasBrother");
+        Property hasSister = model.createProperty(familyNs + "hasSister");
+        Property hasProgenitor = model.createProperty(familyNs + "hasProgenitor");
+        Property hasFather = model.createProperty(familyNs + "hasFather");
+        Property hasMother = model.createProperty(familyNs + "hasMother");
+        Property hasSpouse = model.createProperty(familyNs + "hasSpouse");
+        Property gender = model.createProperty(foafNs + "gender");
+        Property isRelatedTo = model.createProperty(foafNs + "isRelatedTo");
 
-    // Create family Simpson
-    Resource simpsonFamily =
-        model.createResource(simNs + "SimpsonFamily").addProperty(RDF.type, familyClass);
+        // Create family Simpson
+        Resource simpsonFamily = model.createResource(simNs + "SimpsonFamily").addProperty(RDF.type, familyClass);
 
-    // Create members of the Simpson family
-    Resource homer =
-        model
-            .createResource(simNs + "HomerSimpson")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Homer Simpson")
-            .addProperty(gender, maleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("36", XSD.xint.getURI()));
-    Resource marge =
-        model
-            .createResource(simNs + "MargeSimpson")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Marge Simpson")
-            .addProperty(gender, femaleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("34", XSD.xint.getURI()));
-    Resource bart =
-        model
-            .createResource(simNs + "BartSimpson")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Bart Simpson")
-            .addProperty(gender, maleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("10", XSD.xint.getURI()));
-    Resource lisa =
-        model
-            .createResource(simNs + "LisaSimpson")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Lisa Simpson")
-            .addProperty(gender, femaleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("8", XSD.xint.getURI()));
-    Resource maggie =
-        model
-            .createResource(simNs + "MaggieSimpson")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Maggie Simpson")
-            .addProperty(gender, femaleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("1", XSD.xint.getURI()));
-    Resource abe =
-        model
-            .createResource(simNs + "AbeSimpson")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Abe Simpson")
-            .addProperty(gender, maleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("87", XSD.xint.getURI()));
-    Resource mona =
-        model
-            .createResource(simNs + "MonaSimpson")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Mona Simpson")
-            .addProperty(gender, femaleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("87", XSD.xint.getURI()));
-    Resource clancyBouvier =
-        model
-            .createResource(simNs + "ClancyBouvier")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Clancy Bouvier")
-            .addProperty(gender, maleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("67", XSD.xint.getURI()));
-    Resource jacquelineBouvier =
-        model
-            .createResource(simNs + "JacquelineBouvier")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Jacqueline Bouvier")
-            .addProperty(gender, femaleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("80", XSD.xint.getURI()));
-    Resource pattyBouvier =
-        model
-            .createResource(simNs + "PattyBouvier")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Patty Bouvier")
-            .addProperty(gender, femaleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("41", XSD.xint.getURI()));
-    Resource selmaBouvier =
-        model
-            .createResource(simNs + "SelmaBouvier")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Selma Bouvier")
-            .addProperty(gender, femaleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("41", XSD.xint.getURI()));
-    Resource herbPowell =
-        model
-            .createResource(simNs + "HerbPowell")
-            .addProperty(RDF.type, FOAF.Person)
-            .addProperty(FOAF.name, "Herb Powell")
-            .addProperty(gender, maleClass)
-            .addProperty(FOAF.age, model.createTypedLiteral("50", XSD.xint.getURI()));
+        List<String> list = new ArrayList<>();
+        list.add("/wiki/Homer_Simpson");
 
-    // Define hasMemberFamily relationships
-    simpsonFamily.addProperty(hasMemberFamily, homer);
-    simpsonFamily.addProperty(hasMemberFamily, marge);
-    simpsonFamily.addProperty(hasMemberFamily, bart);
-    simpsonFamily.addProperty(hasMemberFamily, lisa);
-    simpsonFamily.addProperty(hasMemberFamily, maggie);
-    simpsonFamily.addProperty(hasMemberFamily, abe);
-    simpsonFamily.addProperty(hasMemberFamily, mona);
-    simpsonFamily.addProperty(hasMemberFamily, clancyBouvier);
-    simpsonFamily.addProperty(hasMemberFamily, jacquelineBouvier);
-    simpsonFamily.addProperty(hasMemberFamily, pattyBouvier);
-    simpsonFamily.addProperty(hasMemberFamily, selmaBouvier);
+        int i = 0;
+        while (i < list.size()) {
 
-    // Homer relationships
-    homer.addProperty(hasSpouse, marge);
-    homer.addProperty(hasFather, abe);
-    homer.addProperty(hasMother, mona);
+            try {
+                String url = "https://simpsons.fandom.com" + list.get(i);
 
-    // Marge relationships
-    marge.addProperty(hasSpouse, homer);
-    marge.addProperty(hasFather, clancyBouvier);
-    marge.addProperty(hasMother, jacquelineBouvier);
+                String resourceName = url.substring(url.lastIndexOf("/") + 1);
+                System.out.println("Resource Name: " + resourceName.replaceAll("[^A-Za-z0-9_.-]", "_"));
 
-    // Abe relationships
-    abe.addProperty(hasSpouse, mona);
+                Resource person = model
+                        .createResource(simNs + resourceName.replaceAll("[^A-Za-z0-9_.-]", "").replace("_", ""))
+                        .addProperty(RDF.type, FOAF.Person)
+                        .addProperty(FOAF.name, resourceName.replace("_", " "));
 
-    // Bart relationships
-    bart.addProperty(hasFather, homer);
-    bart.addProperty(hasMother, marge);
-    bart.addProperty(hasSister, lisa);
-    bart.addProperty(hasSister, maggie);
+                // Add the person to the Simpson family
+                simpsonFamily.addProperty(hasMemberFamily, person);
 
-    // Lisa relationships
-    lisa.addProperty(hasFather, homer);
-    lisa.addProperty(hasMother, marge);
-    lisa.addProperty(hasBrother, bart);
-    lisa.addProperty(hasSister, maggie);
+                // Fetch the document
+                Document doc = Jsoup.connect(url).get();
 
-    // Maggie relationships
-    maggie.addProperty(hasFather, homer);
-    maggie.addProperty(hasMother, marge);
-    maggie.addProperty(hasBrother, bart);
-    maggie.addProperty(hasSister, lisa);
+                // Sleep between 0.5 and 2 seconds
+                Thread.sleep(ThreadLocalRandom.current().nextInt(500, 2001));
 
-    // Clancy Bouvier relationships
-    clancyBouvier.addProperty(hasSpouse, jacquelineBouvier);
+                // Extract the info box
+                Element infobox = doc.select("aside.portable-infobox").first();
 
-    // Jacqueline Bouvier relationships
-    jacquelineBouvier.addProperty(hasSpouse, clancyBouvier);
+                // Gender
+                Element genderElement = infobox.selectFirst("[data-source=sex]");
+                String foundGender = genderElement != null ? genderElement.text() : "Unknown";
+                if (foundGender.strip().equals("Gender Male ♂")) {
+                    model.add(person, gender, maleClass);
+                } else if (foundGender.strip().equals("Gender Female ♀")) {
+                    model.add(person, gender, femaleClass);
+                } else {
+                    // Choose a random gender
+                    System.out.println("Gender not found");
+                    if (Math.random() < 0.5) {
+                        model.add(person, gender, maleClass);
+                    } else {
+                        model.add(person, gender, femaleClass);
+                    }
+                }
 
-    // Patty Bouvier relationships
-    pattyBouvier.addProperty(hasSister, selmaBouvier);
-    pattyBouvier.addProperty(hasSister, marge);
-    pattyBouvier.addProperty(hasFather, clancyBouvier);
-    pattyBouvier.addProperty(hasMother, jacquelineBouvier);
+                // Age
+                Element ageElement = infobox.select("[data-source=age]").first();
+                // Print raw age html
+                int age = -1;
+                if (ageElement != null) {
+                    // Extract text content (numbers and other text)
+                    String text = ageElement.text();
+                    // Use regex to find the first number
+                    Matcher matcher = Pattern.compile("\\d+").matcher(text);
+                    if (matcher.find()) {
+                        age = Integer.parseInt(matcher.group());
+                    }
+                }
+                person.addProperty(FOAF.age, model.createTypedLiteral(String.valueOf(age), XSD.xint.getURI()));
 
-    // Selma Bouvier relationships
-    selmaBouvier.addProperty(hasSister, pattyBouvier);
-    selmaBouvier.addProperty(hasSister, marge);
-    selmaBouvier.addProperty(hasFather, clancyBouvier);
-    selmaBouvier.addProperty(hasMother, jacquelineBouvier);
+                // Get the relationships
+                Element relativesElement = infobox.select("[data-source=relatives]").first();
 
-    // Herb Powell relationships
-    herbPowell.addProperty(hasFather, abe);
+                // The parents
+                Elements parents = extractLinksFor(relativesElement, "Parents:");
+                for (Element link : parents) {
 
-    // Save the file
-    try (java.io.FileOutputStream out = new java.io.FileOutputStream(outputFileName)) {
-      RDFDataMgr.write(out, model, org.apache.jena.riot.Lang.TURTLE);
-    } catch (Exception e) {
-      e.printStackTrace();
+                    // Remove %22 and other similar
+                    String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
+
+                    Resource relative = model
+                            .createResource(
+                                    simNs + relativeUrl.substring(relativeUrl.lastIndexOf("/") + 1)
+                                            .replaceAll("[^A-Za-z0-9_.-]", "").replace("_", ""));
+
+                    person.addProperty(hasProgenitor, relative);
+
+                    if (!list.contains(relativeUrl)) {
+                        list.add(relativeUrl);
+                    }
+                }
+
+                // Wives
+                Elements wives = extractLinksFor(relativesElement, "Wife:");
+                for (Element link : wives) {
+
+                    // Remove %22 and other similar
+                    String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
+
+                    Resource relative = model
+                            .createResource(
+                                    simNs + relativeUrl.substring(relativeUrl.lastIndexOf("/") + 1)
+                                            .replaceAll("[^A-Za-z0-9_.-]", "").replace("_", ""));
+
+                    person.addProperty(hasSpouse, relative);
+
+                    if (!list.contains(relativeUrl)) {
+                        list.add(relativeUrl);
+                    }
+                }
+
+                // Husband
+                Elements husbands = extractLinksFor(relativesElement, "Husband:");
+                for (Element link : husbands) {
+
+                    // Remove %22 and other similar
+                    String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
+
+                    Resource relative = model
+                            .createResource(
+                                    simNs + relativeUrl.substring(relativeUrl.lastIndexOf("/") + 1)
+                                            .replaceAll("[^A-Za-z0-9_.-]", "").replace("_", ""));
+
+                    person.addProperty(hasSpouse, relative);
+
+                    if (!list.contains(relativeUrl)) {
+                        list.add(relativeUrl);
+                    }
+                }
+
+                // Children
+                Elements children = extractLinksFor(relativesElement, "Children:");
+                for (Element link : children) {
+
+                    // Remove the %22
+                    String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
+
+                    // We do not add the child, we just add it to the list to be processed later
+                    if (!list.contains(relativeUrl)) {
+                        list.add(relativeUrl);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            i++;
+
+        }
+
+        // Create members of the Simpson family
+        // Resource homer = model
+        // .createResource(simNs + "HomerSimpson")
+        // .addProperty(FOAF.age, model.createTypedLiteral("36", XSD.xint.getURI()));
+        // Resource marge = model
+        // .createResource(simNs + "MargeSimpson")
+        // .addProperty(FOAF.age, model.createTypedLiteral("34", XSD.xint.getURI()));
+        // Resource bart = model
+        // .createResource(simNs + "BartSimpson")
+        // .addProperty(FOAF.age, model.createTypedLiteral("10", XSD.xint.getURI()));
+        // Resource lisa = model
+        // .createResource(simNs + "LisaSimpson")
+        // .addProperty(FOAF.age, model.createTypedLiteral("8", XSD.xint.getURI()));
+        // Resource maggie = model
+        // .createResource(simNs + "MaggieSimpson")
+        // .addProperty(FOAF.age, model.createTypedLiteral("1", XSD.xint.getURI()));
+
+        // Save the file
+        try (java.io.FileOutputStream out = new java.io.FileOutputStream(outputFileName)) {
+            RDFDataMgr.write(out, model, org.apache.jena.riot.Lang.TURTLE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-  }
+
+    private static Elements extractLinksFor(Element relativesElement, String label) {
+        // Find the <b> element that contains the label
+        Element labelElement = relativesElement.select("b:matchesOwn(^" + label + "$)").first();
+        if (labelElement != null) {
+            // Get all links until the next <b> or <br>
+            StringBuilder selector = new StringBuilder();
+            Element current = labelElement.nextElementSibling();
+            while (current != null && !current.tagName().equals("b") && !current.tagName().equals("br")) {
+                selector.append(current.outerHtml());
+                current = current.nextElementSibling();
+            }
+
+            // Parse the collected HTML fragment
+            Document fragment = Jsoup.parse(selector.toString());
+            Elements links = fragment.select("a[href]");
+
+            return links;
+        }
+
+        return new Elements();
+    }
+
 }
