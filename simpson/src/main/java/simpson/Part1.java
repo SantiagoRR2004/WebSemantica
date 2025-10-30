@@ -26,13 +26,16 @@ public class Part1 {
       Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
 
   // Dictionary of known Simpson characters and their ages
-  private static final java.util.Map<String, Integer> KNOWN_AGES = new java.util.HashMap<String, Integer>() {{
-    put("Homer_Simpson", 36);
-    put("Marge_Simpson", 34);
-    put("Bart_Simpson", 10);
-    put("Lisa_Simpson", 8);
-    put("Maggie_Simpson", 1);
-  }};
+  private static final java.util.Map<String, Integer> KNOWN_AGES =
+      new java.util.HashMap<String, Integer>() {
+        {
+          put("Homer_Simpson", 36);
+          put("Marge_Simpson", 34);
+          put("Bart_Simpson", 10);
+          put("Lisa_Simpson", 8);
+          put("Maggie_Simpson", 1);
+        }
+      };
 
   public static void main(String[] args) {
     Model model = ModelFactory.createDefaultModel();
@@ -130,13 +133,13 @@ public class Part1 {
             age = Integer.parseInt(matcher.group());
           }
         }
-        
+
         // If age not found on webpage, check the dictionary
         if (age == -1 && KNOWN_AGES.containsKey(resourceName)) {
           age = KNOWN_AGES.get(resourceName);
           System.out.println("Using known age from dictionary: " + age);
         }
-        
+
         person.addProperty(
             FOAF.age, model.createTypedLiteral(String.valueOf(age), XSD.xint.getURI()));
 
