@@ -122,7 +122,6 @@ public class Part1 {
 
         // Age
         Element ageElement = infobox.select("[data-source=age]").first();
-        // Print raw age html
         int age = -1;
         if (ageElement != null) {
           // Extract text content (numbers and other text)

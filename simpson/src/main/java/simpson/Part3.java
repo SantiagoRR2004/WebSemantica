@@ -17,6 +17,9 @@ import org.apache.jena.riot.RDFDataMgr;
 public class Part3 {
   static final String inputFileName =
       Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
+  static final String outputFileName =
+      Paths.get(System.getProperty("user.dir"), "complete.ttl").toString();
+
   static final String progenitorRules =
       Paths.get(System.getProperty("user.dir"), "rules", "progenitor.rules").toString();
 
@@ -48,6 +51,13 @@ public class Part3 {
 
     StmtIterator iter = infModel.getDeductionsModel().listStatements();
     printIterator(iter, infModel);
+
+    // Save the file
+    try (java.io.FileOutputStream out = new java.io.FileOutputStream(outputFileName)) {
+      RDFDataMgr.write(out, model, org.apache.jena.riot.Lang.TURTLE);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   static void printAligned(String s, String p, String o) {
