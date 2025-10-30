@@ -79,11 +79,6 @@ public class Part3 {
   }
 
   static void printIterator(StmtIterator it, Model model) {
-    // Build a prefix mapping that includes standard RDF/RDFS/XSD/OWL prefixes
-    // and any prefixes declared in the loaded model (from family.ttl).
-    PrefixMapping pm = PrefixMapping.Factory.create();
-    pm.setNsPrefixes(PrefixMapping.Standard);
-    pm.setNsPrefixes(model);
 
     while (it.hasNext()) {
       Statement stmt = it.next();
@@ -91,14 +86,14 @@ public class Part3 {
       // Add them to the original model
       model.add(stmt);
 
-      String s = pm.shortForm(stmt.getSubject().getURI());
+      String s = model.shortForm(stmt.getSubject().getURI());
 
-      String p = pm.shortForm(stmt.getPredicate().getURI());
+      String p = model.shortForm(stmt.getPredicate().getURI());
 
       RDFNode obj = stmt.getObject();
       String o;
       if (obj.isResource()) {
-        o = pm.shortForm(obj.asResource().getURI());
+        o = model.shortForm(obj.asResource().getURI());
       } else {
         // Literal: print lexical form (Jena's toString includes datatype/lang)
         o = obj.toString();
