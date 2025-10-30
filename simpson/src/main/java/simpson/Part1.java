@@ -91,7 +91,7 @@ public class Part1 {
         Resource person =
             model
                 .createResource(
-                    simNs + resourceName.replaceAll("[^A-Za-z0-9_.-]", "").replace("_", ""))
+                    simNs + resourceName.replaceAll("[^A-Za-z0-9_-]", "").replace("_", ""))
                 .addProperty(RDF.type, FOAF.Person)
                 .addProperty(FOAF.name, resourceName.replace("_", " "));
 
@@ -156,7 +156,7 @@ public class Part1 {
                   simNs
                       + relativeUrl
                           .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_.-]", "")
+                          .replaceAll("[^A-Za-z0-9_-]", "")
                           .replace("_", ""));
 
           person.addProperty(hasProgenitor, relative);
@@ -178,7 +178,7 @@ public class Part1 {
                   simNs
                       + relativeUrl
                           .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_.-]", "")
+                          .replaceAll("[^A-Za-z0-9_-]", "")
                           .replace("_", ""));
 
           person.addProperty(hasSpouse, relative);
@@ -200,7 +200,7 @@ public class Part1 {
                   simNs
                       + relativeUrl
                           .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_.-]", "")
+                          .replaceAll("[^A-Za-z0-9_-]", "")
                           .replace("_", ""));
 
           person.addProperty(hasSpouse, relative);
