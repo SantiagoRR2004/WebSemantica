@@ -2,7 +2,6 @@ package simpson;
 
 import java.nio.file.Paths;
 import java.util.List;
-
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.InfModel;
