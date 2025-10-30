@@ -25,90 +25,91 @@ public class Part1 {
   static final String outputFileName =
       Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
 
-    public static void main(String[] args) {
-        Model model = ModelFactory.createDefaultModel();
-        String familyNs = "http://www.esei.uvigo.es/ws/familia#";
-        String foafNs = "http://xmlns.com/foaf/0.1/";
-        String rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-        String rdfsNs = "http://www.w3.org/2000/01/rdf-schema#";
-        String xsdNs = "http://www.w3.org/2001/XMLSchema#";
-        String simNs = "http://www.esei.uvigo.es/ws/simpsons#";
+  public static void main(String[] args) {
+    Model model = ModelFactory.createDefaultModel();
+    String familyNs = "http://www.esei.uvigo.es/ws/familia#";
+    String foafNs = "http://xmlns.com/foaf/0.1/";
+    String rdfNs = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+    String rdfsNs = "http://www.w3.org/2000/01/rdf-schema#";
+    String xsdNs = "http://www.w3.org/2001/XMLSchema#";
+    String simNs = "http://www.esei.uvigo.es/ws/simpsons#";
 
-        model.setNsPrefix("fam", familyNs);
-        model.setNsPrefix("foaf", foafNs);
-        model.setNsPrefix("rdf", rdfNs);
-        model.setNsPrefix("rdfs", rdfsNs);
-        model.setNsPrefix("xsd", xsdNs);
-        model.setNsPrefix("sim", simNs);
+    model.setNsPrefix("fam", familyNs);
+    model.setNsPrefix("foaf", foafNs);
+    model.setNsPrefix("rdf", rdfNs);
+    model.setNsPrefix("rdfs", rdfsNs);
+    model.setNsPrefix("xsd", xsdNs);
+    model.setNsPrefix("sim", simNs);
 
-        // Create classes
-        Resource familyClass = model.createResource(familyNs + "Family");
-        Resource genderClass = model.createResource(familyNs + "Gender");
-        Resource maleClass = model.createResource(familyNs + "Masc");
-        Resource femaleClass = model.createResource(familyNs + "Fem");
+    // Create classes
+    Resource familyClass = model.createResource(familyNs + "Family");
+    Resource genderClass = model.createResource(familyNs + "Gender");
+    Resource maleClass = model.createResource(familyNs + "Masc");
+    Resource femaleClass = model.createResource(familyNs + "Fem");
 
-        // Create properties
-        Property hasMemberFamily = model.createProperty(familyNs + "hasMemberFamily");
-        Property hasSiblings = model.createProperty(familyNs + "hasSiblings");
-        Property hasBrother = model.createProperty(familyNs + "hasBrother");
-        Property hasSister = model.createProperty(familyNs + "hasSister");
-        Property hasProgenitor = model.createProperty(familyNs + "hasProgenitor");
-        Property hasFather = model.createProperty(familyNs + "hasFather");
-        Property hasMother = model.createProperty(familyNs + "hasMother");
-        Property hasSpouse = model.createProperty(familyNs + "hasSpouse");
-        Property gender = model.createProperty(foafNs + "gender");
-        Property isRelatedTo = model.createProperty(foafNs + "isRelatedTo");
+    // Create properties
+    Property hasMemberFamily = model.createProperty(familyNs + "hasMemberFamily");
+    Property hasSiblings = model.createProperty(familyNs + "hasSiblings");
+    Property hasBrother = model.createProperty(familyNs + "hasBrother");
+    Property hasSister = model.createProperty(familyNs + "hasSister");
+    Property hasProgenitor = model.createProperty(familyNs + "hasProgenitor");
+    Property hasFather = model.createProperty(familyNs + "hasFather");
+    Property hasMother = model.createProperty(familyNs + "hasMother");
+    Property hasSpouse = model.createProperty(familyNs + "hasSpouse");
+    Property gender = model.createProperty(foafNs + "gender");
+    Property isRelatedTo = model.createProperty(foafNs + "isRelatedTo");
 
-        // Create family Simpson
-        Resource simpsonFamily = model.createResource(simNs + "SimpsonFamily").addProperty(RDF.type, familyClass);
+    // Create family Simpson
+    Resource simpsonFamily =
+        model.createResource(simNs + "SimpsonFamily").addProperty(RDF.type, familyClass);
 
-        List<String> list = new ArrayList<>();
-        list.add("/wiki/Homer_Simpson");
+    List<String> list = new ArrayList<>();
+    list.add("/wiki/Homer_Simpson");
 
-        int i = 0;
-        while (i < list.size()) {
+    int i = 0;
+    while (i < list.size()) {
 
-            try {
-                String url = "https://simpsons.fandom.com" + list.get(i);
+      try {
+        String url = "https://simpsons.fandom.com" + list.get(i);
 
-                String resourceName = url.substring(url.lastIndexOf("/") + 1);
-                System.out.println("Resource Name: " + resourceName.replaceAll("[^A-Za-z0-9_.-]", "_"));
+        String resourceName = url.substring(url.lastIndexOf("/") + 1);
+        System.out.println("Resource Name: " + resourceName.replaceAll("[^A-Za-z0-9_.-]", "_"));
 
         Resource person =
             model
                 .createResource(
                     simNs + resourceName.replaceAll("[^A-Za-z0-9_.-]", "").replace("_", ""))
-                        .addProperty(RDF.type, FOAF.Person)
-                        .addProperty(FOAF.name, resourceName.replace("_", " "));
+                .addProperty(RDF.type, FOAF.Person)
+                .addProperty(FOAF.name, resourceName.replace("_", " "));
 
-                // Add the person to the Simpson family
-                simpsonFamily.addProperty(hasMemberFamily, person);
+        // Add the person to the Simpson family
+        simpsonFamily.addProperty(hasMemberFamily, person);
 
-                // Fetch the document
-                Document doc = Jsoup.connect(url).get();
+        // Fetch the document
+        Document doc = Jsoup.connect(url).get();
 
-                // Sleep between 0.5 and 2 seconds
-                Thread.sleep(ThreadLocalRandom.current().nextInt(500, 2001));
+        // Sleep between 0.5 and 2 seconds
+        Thread.sleep(ThreadLocalRandom.current().nextInt(500, 2001));
 
-                // Extract the info box
-                Element infobox = doc.select("aside.portable-infobox").first();
+        // Extract the info box
+        Element infobox = doc.select("aside.portable-infobox").first();
 
-                // Gender
-                Element genderElement = infobox.selectFirst("[data-source=sex]");
-                String foundGender = genderElement != null ? genderElement.text() : "Unknown";
-                if (foundGender.strip().equals("Gender Male ♂")) {
-                    model.add(person, gender, maleClass);
-                } else if (foundGender.strip().equals("Gender Female ♀")) {
-                    model.add(person, gender, femaleClass);
-                } else {
-                    // Choose a random gender
-                    System.out.println("Gender not found");
-                    if (Math.random() < 0.5) {
-                        model.add(person, gender, maleClass);
-                    } else {
-                        model.add(person, gender, femaleClass);
-                    }
-                }
+        // Gender
+        Element genderElement = infobox.selectFirst("[data-source=sex]");
+        String foundGender = genderElement != null ? genderElement.text() : "Unknown";
+        if (foundGender.strip().equals("Gender Male ♂")) {
+          model.add(person, gender, maleClass);
+        } else if (foundGender.strip().equals("Gender Female ♀")) {
+          model.add(person, gender, femaleClass);
+        } else {
+          // Choose a random gender
+          System.out.println("Gender not found");
+          if (Math.random() < 0.5) {
+            model.add(person, gender, maleClass);
+          } else {
+            model.add(person, gender, femaleClass);
+          }
+        }
 
         // Age
         Element ageElement = infobox.select("[data-source=age]").first();

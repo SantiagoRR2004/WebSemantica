@@ -13,7 +13,6 @@ import org.apache.jena.reasoner.ReasonerRegistry;
 import org.apache.jena.reasoner.rulesys.GenericRuleReasoner;
 import org.apache.jena.reasoner.rulesys.Rule;
 import org.apache.jena.riot.RDFDataMgr;
-import org.apache.jena.shared.PrefixMapping;
 
 public class Part3 {
   static final String inputFileName =
