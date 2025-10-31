@@ -10,10 +10,8 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
 public class Part2 {
-  static final String inputFileName =
-      Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
-  static final String outputFileName =
-      Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
+  static final String inputFileName = Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
+  static final String outputFileName = Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
 
   public static void main(String[] args) {
     // Create an empty model
@@ -60,6 +58,11 @@ public class Part2 {
     Property hasFather = model.getProperty(familyNs + "hasFather");
     Property hasMother = model.getProperty(familyNs + "hasMother");
     Property hasSpouse = model.getProperty(familyNs + "hasSpouse");
+    Property hasGrandparent = model.getProperty(familyNs + "hasGrandparent");
+    Property hasGrandfather = model.getProperty(familyNs + "hasGrandfather");
+    Property hasGrandmother = model.getProperty(familyNs + "hasGrandmother");
+    Property hasUncle = model.getProperty(familyNs + "hasUncle");
+    Property hasAunt = model.getProperty(familyNs + "hasAunt");
 
     // Define their types, ranges and domains
     hasGender
@@ -75,18 +78,48 @@ public class Part2 {
         .addProperty(RDFS.domain, family)
         .addProperty(RDFS.range, person);
     hasSiblings
-        .addProperty(RDF.type, RDF.Property)
+        .addProperty(RDFS.subPropertyOf, isRelatedTo)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
-    hasBrother.addProperty(RDFS.subPropertyOf, hasSiblings);
-    hasSister.addProperty(RDFS.subPropertyOf, hasSiblings);
+    hasBrother.addProperty(RDFS.subPropertyOf, hasSiblings)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
+    hasSister.addProperty(RDFS.subPropertyOf, hasSiblings)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
     hasProgenitor
         .addProperty(RDFS.subPropertyOf, isRelatedTo)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
-    hasFather.addProperty(RDFS.subPropertyOf, hasProgenitor);
-    hasMother.addProperty(RDFS.subPropertyOf, hasProgenitor);
-    hasSpouse.addProperty(RDF.type, RDF.Property);
+    hasFather.addProperty(RDFS.subPropertyOf, hasProgenitor)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
+    hasMother.addProperty(RDFS.subPropertyOf, hasProgenitor)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
+    hasSpouse.addProperty(RDFS.subPropertyOf, isRelatedTo)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
+    hasGrandparent
+        .addProperty(RDFS.subPropertyOf, isRelatedTo)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
+    hasGrandfather
+        .addProperty(RDFS.subPropertyOf, hasGrandparent)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
+    hasGrandmother
+        .addProperty(RDFS.subPropertyOf, hasGrandparent)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
+    hasUncle
+        .addProperty(RDFS.subPropertyOf, isRelatedTo)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
+    hasAunt
+        .addProperty(RDFS.subPropertyOf, isRelatedTo)
+        .addProperty(RDFS.domain, person)
+        .addProperty(RDFS.range, person);
 
     // Save the file
     try (java.io.FileOutputStream out = new java.io.FileOutputStream(outputFileName)) {
