@@ -10,8 +10,10 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
 public class Part2 {
-  static final String inputFileName = Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
-  static final String outputFileName = Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
+  static final String inputFileName =
+      Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
+  static final String outputFileName =
+      Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
 
   public static void main(String[] args) {
     // Create an empty model
@@ -81,23 +83,28 @@ public class Part2 {
         .addProperty(RDFS.subPropertyOf, isRelatedTo)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
-    hasBrother.addProperty(RDFS.subPropertyOf, hasSiblings)
+    hasBrother
+        .addProperty(RDFS.subPropertyOf, hasSiblings)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
-    hasSister.addProperty(RDFS.subPropertyOf, hasSiblings)
+    hasSister
+        .addProperty(RDFS.subPropertyOf, hasSiblings)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
     hasProgenitor
         .addProperty(RDFS.subPropertyOf, isRelatedTo)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
-    hasFather.addProperty(RDFS.subPropertyOf, hasProgenitor)
+    hasFather
+        .addProperty(RDFS.subPropertyOf, hasProgenitor)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
-    hasMother.addProperty(RDFS.subPropertyOf, hasProgenitor)
+    hasMother
+        .addProperty(RDFS.subPropertyOf, hasProgenitor)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
-    hasSpouse.addProperty(RDFS.subPropertyOf, isRelatedTo)
+    hasSpouse
+        .addProperty(RDFS.subPropertyOf, isRelatedTo)
         .addProperty(RDFS.domain, person)
         .addProperty(RDFS.range, person);
     hasGrandparent
