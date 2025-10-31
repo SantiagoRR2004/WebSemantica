@@ -10,8 +10,10 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
 public class Part2 {
-  static final String inputFileName = Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
-  static final String outputFileName = Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
+  static final String inputFileName =
+      Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
+  static final String outputFileName =
+      Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
 
   public static void main(String[] args) {
     // Create an empty model
