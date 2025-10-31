@@ -10,10 +10,8 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.RDFS;
 
 public class Part2 {
-  static final String inputFileName =
-      Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
-  static final String outputFileName =
-      Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
+  static final String inputFileName = Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
+  static final String outputFileName = Paths.get(System.getProperty("user.dir"), "family.ttl").toString();
 
   public static void main(String[] args) {
     // Create an empty model
@@ -72,8 +70,8 @@ public class Part2 {
         .addProperty(RDFS.range, person);
     hasMemberFamily
         .addProperty(RDF.type, RDF.Property)
-        .addProperty(RDFS.domain, person)
-        .addProperty(RDFS.range, family);
+        .addProperty(RDFS.domain, family)
+        .addProperty(RDFS.range, person);
     hasSiblings
         .addProperty(RDF.type, RDF.Property)
         .addProperty(RDFS.domain, person)
