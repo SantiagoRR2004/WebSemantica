@@ -19,13 +19,13 @@ These are the ones that appear just by applying RDFS reasoning. There are some t
 - `fam:hasGender rdfs:subPropertyOf fam:hasGender`. Every property will be `rdfs:subPropertyOf` of itself.
 - `foaf:Person rdfs:subClassOf rdfs:Resource`. Every class will be `rdfs:subClassOf` of `rdfs:Resource`.
 
-### [Related Rules Inferences](./rules/related.rules)
+### [Related Inferences](./rules/related.rules)
 
 Because to be related to someone, you just need to be in the same family, this rule infers that every character is related to all other characters because we only have one family. This is an example:
 
 - `sim:TrixieStemple fam:isRelatedTo sim:WainwrightMontgomeryBurns`
 
-### [Progenitor Rules Inferences](./rules/progenitor.rules)
+### [Progenitor Inferences](./rules/progenitor.rules)
 
 These are 2 bidirectional rules that say that if you have a male progenitor, that person is your father, and if you have a female progenitor, that person is your mother. Examples of these inferences are:
 
@@ -34,7 +34,7 @@ These are 2 bidirectional rules that say that if you have a male progenitor, tha
 - `sim:HomerSimpson fam:hasFather sim:AbeSimpsonII`
 - `sim:HomerSimpson fam:hasMother sim:MonaSimpson`
 
-### [Sibling Rules Inferences](./rules/sibling.rules)
+### [Sibling Inferences](./rules/sibling.rules)
 
 These rules infer sibling relationships based on shared progenitors. If two individuals share the same father or mother, they are inferred to be siblings. If a sibling is male, they are inferred to be a brother; if female, a sister. Examples of these inferences are:
 
@@ -51,7 +51,7 @@ These rules infer sibling relationships based on shared progenitors. If two indi
 - `sim:BartSimpson fam:hasSiblings sim:MaggieSimpson`
 - `sim:BartSimpson fam:hasSiblings sim:LisaSimpson`
 
-### [Grandparents Rules Inferences](./rules/grandparent.rules)
+### [Grandparents Inferences](./rules/grandparent.rules)
 
 These rules infer grandparent relationships based on progenitor relationships. If an individual has a progenitor who also has a progenitor, the latter is inferred to be the grandparent of the former. Additionally, if the grandparent is male, they are inferred to be a grandfather; if female, a grandmother. Examples of these inferences are:
 
@@ -64,7 +64,7 @@ These rules infer grandparent relationships based on progenitor relationships. I
 - `sim:BartSimpson fam:hasGrandparent sim:MonaSimpson`
 - `sim:BartSimpson fam:hasGrandparent sim:JacquelineBouvier`
 
-### [Uncle and Aunt Rules Inferences](./rules/uncle.rules)
+### [Uncle and Aunt Inferences](./rules/uncle.rules)
 
 These rules infer uncle and aunt relationships based on sibling and progenitor relationships. If an individual's progenitor has a sibling, that sibling is inferred to be the uncle or aunt of the individual, depending on the sibling's gender. Examples of these inferences are:
 

@@ -28,14 +28,14 @@ public class Part1 {
   // Dictionary of known Simpson characters and their ages
   private static final java.util.Map<String, Integer> KNOWN_AGES =
       new java.util.HashMap<String, Integer>() {
-        {
-          put("Homer_Simpson", 36);
-          put("Marge_Simpson", 34);
-          put("Bart_Simpson", 10);
-          put("Lisa_Simpson", 8);
-          put("Maggie_Simpson", 1);
-        }
-      };
+    {
+      put("Homer_Simpson", 36);
+      put("Marge_Simpson", 34);
+      put("Bart_Simpson", 10);
+      put("Lisa_Simpson", 8);
+      put("Maggie_Simpson", 1);
+    }
+  };
 
   public static void main(String[] args) {
     Model model = ModelFactory.createDefaultModel();
@@ -95,10 +95,10 @@ public class Part1 {
 
         Resource person =
             model
-                .createResource(
-                    simNs + resourceName.replaceAll("[^A-Za-z0-9_-]", "").replace("_", ""))
-                .addProperty(RDF.type, FOAF.Person)
-                .addProperty(FOAF.name, resourceName.replace("_", " "));
+            .createResource(
+                simNs + resourceName.replaceAll("[^A-Za-z0-9_-]", "").replace("_", ""))
+            .addProperty(RDF.type, FOAF.Person)
+            .addProperty(FOAF.name, resourceName.replace("_", " "));
 
         // Add the person to the Simpson family
         simpsonFamily.addProperty(hasMemberFamily, person);
@@ -150,7 +150,9 @@ public class Part1 {
         Element relativesElement = infobox.select("[data-source=relatives]").first();
 
         // The parents
-        Elements parents = extractLinksFor(relativesElement, "Parents:");
+        Elements parents = new Elements();
+        parents.addAll(extractLinksFor(relativesElement, "Parents:"));
+        parents.addAll(extractLinksFor(relativesElement, "Biological Parents:"));
         for (Element link : parents) {
 
           // Remove %22 and other similar
@@ -158,11 +160,11 @@ public class Part1 {
 
           Resource relative =
               model.createResource(
-                  simNs
-                      + relativeUrl
-                          .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_-]", "")
-                          .replace("_", ""));
+              simNs
+                  + relativeUrl
+                      .substring(relativeUrl.lastIndexOf("/") + 1)
+                      .replaceAll("[^A-Za-z0-9_-]", "")
+                      .replace("_", ""));
 
           person.addProperty(hasProgenitor, relative);
 
@@ -180,11 +182,11 @@ public class Part1 {
 
           Resource relative =
               model.createResource(
-                  simNs
-                      + relativeUrl
-                          .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_-]", "")
-                          .replace("_", ""));
+              simNs
+                  + relativeUrl
+                      .substring(relativeUrl.lastIndexOf("/") + 1)
+                      .replaceAll("[^A-Za-z0-9_-]", "")
+                      .replace("_", ""));
 
           person.addProperty(hasSpouse, relative);
 
@@ -202,11 +204,11 @@ public class Part1 {
 
           Resource relative =
               model.createResource(
-                  simNs
-                      + relativeUrl
-                          .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_-]", "")
-                          .replace("_", ""));
+              simNs
+                  + relativeUrl
+                      .substring(relativeUrl.lastIndexOf("/") + 1)
+                      .replaceAll("[^A-Za-z0-9_-]", "")
+                      .replace("_", ""));
 
           person.addProperty(hasSpouse, relative);
 
@@ -226,85 +228,6 @@ public class Part1 {
           if (!list.contains(relativeUrl)) {
             list.add(relativeUrl);
           }
-        }
-
-        // Grandparents - using blank nodes since we don't know if paternal or maternal
-        Elements grandparents = extractLinksFor(relativesElement, "Grandparents:");
-        if (!grandparents.isEmpty()) {
-          // Create a blank node to represent the indirect relationship
-          Resource blankNode = model.createResource();
-
-          for (Element link : grandparents) {
-            String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
-            Resource grandparent =
-                model.createResource(
-                    simNs
-                        + relativeUrl
-                            .substring(relativeUrl.lastIndexOf("/") + 1)
-                            .replaceAll("[^A-Za-z0-9_-]", "")
-                            .replace("_", ""));
-
-            // Add the grandparent to the blank node
-            blankNode.addProperty(hasProgenitor, grandparent);
-
-            if (!list.contains(relativeUrl)) {
-              list.add(relativeUrl);
-            }
-          }
-
-          // Link person to the blank node containing all grandparents
-          person.addProperty(hasGrandparent, blankNode);
-        }
-
-        // Aunts - using blank nodes
-        Elements aunts = extractLinksFor(relativesElement, "Aunts:");
-        if (!aunts.isEmpty()) {
-          Resource blankNode = model.createResource();
-
-          for (Element link : aunts) {
-            String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
-            Resource aunt =
-                model.createResource(
-                    simNs
-                        + relativeUrl
-                            .substring(relativeUrl.lastIndexOf("/") + 1)
-                            .replaceAll("[^A-Za-z0-9_-]", "")
-                            .replace("_", ""));
-
-            blankNode.addProperty(hasProgenitor, aunt);
-
-            if (!list.contains(relativeUrl)) {
-              list.add(relativeUrl);
-            }
-          }
-
-          person.addProperty(hasAunt, blankNode);
-        }
-
-        // Aunts/Uncles - using blank nodes (generic for both aunts and uncles)
-        Elements auntsUncles = extractLinksFor(relativesElement, "Aunts/Uncles:");
-        if (!auntsUncles.isEmpty()) {
-          Resource blankNode = model.createResource();
-
-          for (Element link : auntsUncles) {
-            String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
-            Resource relative =
-                model.createResource(
-                    simNs
-                        + relativeUrl
-                            .substring(relativeUrl.lastIndexOf("/") + 1)
-                            .replaceAll("[^A-Za-z0-9_-]", "")
-                            .replace("_", ""));
-
-            blankNode.addProperty(hasProgenitor, relative);
-
-            if (!list.contains(relativeUrl)) {
-              list.add(relativeUrl);
-            }
-          }
-
-          // Use isRelatedTo for generic aunt/uncle relationships
-          person.addProperty(isRelatedTo, blankNode);
         }
 
       } catch (Exception e) {
