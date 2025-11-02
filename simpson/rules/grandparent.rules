@@ -1,0 +1,29 @@
+[grandparent:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?y),
+    (?y <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?z)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasGrandparent> ?z)
+]
+
+[grandfather:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasGrandparent> ?y),
+    (?y <http://www.esei.uvigo.es/ws/familia#hasGender> <http://www.esei.uvigo.es/ws/familia#Masc>)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasGrandfather> ?y)
+]
+
+[grandfatherR:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasGrandfather> ?y)
+    ->
+    (?x <http://www.esei.uvigo.es/ws/familia#hasGrandparent> ?y)
+]
+
+[grandmother:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasGrandparent> ?y),
+    (?y <http://www.esei.uvigo.es/ws/familia#hasGender> <http://www.esei.uvigo.es/ws/familia#Fem>)
+    -> (?x <http://www.esei.uvigo.es/ws/familia#hasGrandmother> ?y)
+]
+
+[grandmotherR:
+    (?x <http://www.esei.uvigo.es/ws/familia#hasGrandmother> ?y)
+    ->
+    (?x <http://www.esei.uvigo.es/ws/familia#hasGrandparent> ?y)
+]

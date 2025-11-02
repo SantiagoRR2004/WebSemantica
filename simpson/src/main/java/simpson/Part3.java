@@ -27,6 +27,10 @@ public class Part3 {
       Paths.get(System.getProperty("user.dir"), "rules", "related.rules").toString();
   static final String siblingRules =
       Paths.get(System.getProperty("user.dir"), "rules", "sibling.rules").toString();
+  static final String grandparentsRules =
+      Paths.get(System.getProperty("user.dir"), "rules", "grandparent.rules").toString();
+  static final String uncleRules =
+      Paths.get(System.getProperty("user.dir"), "rules", "uncle.rules").toString();
 
   static final int width = 110;
   static final int length = (width - 40) / 2;
@@ -76,6 +80,28 @@ public class Part3 {
     System.out.println("-".repeat(length) + " Sibling Rules Inferences " + "-".repeat(length));
     System.out.println("-".repeat(length * 2 + " Sibling Rules Inferences ".length()));
     rules = Rule.rulesFromURL(siblingRules);
+    ruleReasoner = new GenericRuleReasoner(rules);
+
+    infModel = ModelFactory.createInfModel(ruleReasoner, infModel);
+    iter = infModel.getDeductionsModel().listStatements();
+    printIterator(iter, infModel);
+
+    // Now the grandparents rules
+    System.out.println("-".repeat(length * 2 + " Grandparents Rules Inferences ".length()));
+    System.out.println("-".repeat(length) + " Grandparents Rules Inferences " + "-".repeat(length));
+    System.out.println("-".repeat(length * 2 + " Grandparents Rules Inferences ".length()));
+    rules = Rule.rulesFromURL(grandparentsRules);
+    ruleReasoner = new GenericRuleReasoner(rules);
+
+    infModel = ModelFactory.createInfModel(ruleReasoner, infModel);
+    iter = infModel.getDeductionsModel().listStatements();
+    printIterator(iter, infModel);
+
+    // Now the uncle rules
+    System.out.println("-".repeat(length * 2 + " Uncle Rules Inferences ".length()));
+    System.out.println("-".repeat(length) + " Uncle Rules Inferences " + "-".repeat(length));
+    System.out.println("-".repeat(length * 2 + " Uncle Rules Inferences ".length()));
+    rules = Rule.rulesFromURL(uncleRules);
     ruleReasoner = new GenericRuleReasoner(rules);
 
     infModel = ModelFactory.createInfModel(ruleReasoner, infModel);
