@@ -1,5 +1,9 @@
 package simpson;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
@@ -8,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.jena.base.Sys;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
@@ -22,20 +27,20 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Part1 {
-  static final String outputFileName =
-      Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
+  static final String outputFileName = Paths.get(System.getProperty("user.dir"), "simpson.ttl").toString();
 
   // Dictionary of known Simpson characters and their ages
-  private static final java.util.Map<String, Integer> KNOWN_AGES =
-      new java.util.HashMap<String, Integer>() {
-        {
-          put("Homer_Simpson", 36);
-          put("Marge_Simpson", 34);
-          put("Bart_Simpson", 10);
-          put("Lisa_Simpson", 8);
-          put("Maggie_Simpson", 1);
-        }
-      };
+  private static final java.util.Map<String, Integer> KNOWN_AGES = new java.util.HashMap<String, Integer>() {
+    {
+      put("Homer_Simpson", 36);
+      put("Marge_Simpson", 34);
+      put("Bart_Simpson", 10);
+      put("Lisa_Simpson", 8);
+      put("Maggie_Simpson", 1);
+    }
+  };
+
+  static final String BASE_HTML = "https://simpsons.fandom.com";
 
   public static void main(String[] args) {
     Model model = ModelFactory.createDefaultModel();
@@ -78,27 +83,32 @@ public class Part1 {
     Property hasAunt = model.createProperty(familyNs + "hasAunt");
 
     // Create family Simpson
-    Resource simpsonFamily =
-        model.createResource(simNs + "SimpsonFamily").addProperty(RDF.type, familyClass);
+    Resource simpsonFamily = model.createResource(simNs + "SimpsonFamily").addProperty(RDF.type, familyClass);
 
     List<String> list = new ArrayList<>();
-    list.add("/wiki/Homer_Simpson");
+    list.add(BASE_HTML + "/wiki/Homer_Simpson");
 
     int i = 0;
     while (i < list.size()) {
 
       try {
-        String url = "https://simpsons.fandom.com" + list.get(i);
+        String item = list.get(i);
+        String url;
+
+        if (item.startsWith(BASE_HTML)) {
+          url = item;
+        } else {
+          url = BASE_HTML + item;
+        }
 
         String resourceName = url.substring(url.lastIndexOf("/") + 1);
         System.out.println("Resource Name: " + resourceName.replace("_", " "));
 
-        Resource person =
-            model
-                .createResource(
-                    simNs + resourceName.replaceAll("[^A-Za-z0-9_-]", "").replace("_", ""))
-                .addProperty(RDF.type, FOAF.Person)
-                .addProperty(FOAF.name, resourceName.replace("_", " "));
+        Resource person = model
+            .createResource(
+                simNs + resourceName.replaceAll("[^A-Za-z0-9_-]", "").replace("_", ""))
+            .addProperty(RDF.type, FOAF.Person)
+            .addProperty(FOAF.name, resourceName.replace("_", " "));
 
         // Add the person to the Simpson family
         simpsonFamily.addProperty(hasMemberFamily, person);
@@ -158,13 +168,12 @@ public class Part1 {
           // Remove %22 and other similar
           String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
 
-          Resource relative =
-              model.createResource(
-                  simNs
-                      + relativeUrl
-                          .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_-]", "")
-                          .replace("_", ""));
+          Resource relative = model.createResource(
+              simNs
+                  + relativeUrl
+                      .substring(relativeUrl.lastIndexOf("/") + 1)
+                      .replaceAll("[^A-Za-z0-9_-]", "")
+                      .replace("_", ""));
 
           person.addProperty(hasProgenitor, relative);
 
@@ -180,13 +189,12 @@ public class Part1 {
           // Remove %22 and other similar
           String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
 
-          Resource relative =
-              model.createResource(
-                  simNs
-                      + relativeUrl
-                          .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_-]", "")
-                          .replace("_", ""));
+          Resource relative = model.createResource(
+              simNs
+                  + relativeUrl
+                      .substring(relativeUrl.lastIndexOf("/") + 1)
+                      .replaceAll("[^A-Za-z0-9_-]", "")
+                      .replace("_", ""));
 
           person.addProperty(hasSpouse, relative);
 
@@ -202,13 +210,12 @@ public class Part1 {
           // Remove %22 and other similar
           String relativeUrl = URLDecoder.decode(link.attr("href"), StandardCharsets.UTF_8);
 
-          Resource relative =
-              model.createResource(
-                  simNs
-                      + relativeUrl
-                          .substring(relativeUrl.lastIndexOf("/") + 1)
-                          .replaceAll("[^A-Za-z0-9_-]", "")
-                          .replace("_", ""));
+          Resource relative = model.createResource(
+              simNs
+                  + relativeUrl
+                      .substring(relativeUrl.lastIndexOf("/") + 1)
+                      .replaceAll("[^A-Za-z0-9_-]", "")
+                      .replace("_", ""));
 
           person.addProperty(hasSpouse, relative);
 
@@ -258,12 +265,45 @@ public class Part1 {
       }
 
       // Parse the collected HTML fragment
-      Document fragment = Jsoup.parse(selector.toString());
+      Document fragment = Jsoup.parse(selector.toString(), BASE_HTML);
       Elements links = fragment.select("a[href]");
+
+      // Resolve each link’s final destination
+      for (Element link : links) {
+        String href = link.absUrl("href");
+        if (!href.isEmpty()) {
+          link.attr("href", resolveRedirect(href));
+        }
+      }
 
       return links;
     }
 
     return new Elements();
   }
+
+  private static String resolveRedirect(String url) {
+    try {
+      URL currentUrl = URI.create(url).toURL();
+      HttpURLConnection connection = (HttpURLConnection) currentUrl.openConnection();
+      connection.setInstanceFollowRedirects(false);
+      connection.setRequestMethod("HEAD");
+      connection.connect();
+
+      int status = connection.getResponseCode();
+      if (status / 100 == 3) { // Redirect
+        String location = connection.getHeaderField("Location");
+        if (location != null && !location.isEmpty()) {
+          // Handle relative redirects
+          URI base = URI.create(url);
+          URI next = base.resolve(location);
+          return resolveRedirect(next.toString());
+        }
+      }
+      return url;
+    } catch (IOException e) {
+      return url;
+    }
+  }
+
 }

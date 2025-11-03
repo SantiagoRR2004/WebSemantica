@@ -8,6 +8,6 @@
 [aunt:
     (?x <http://www.esei.uvigo.es/ws/familia#hasProgenitor> ?y),
     (?y <http://www.esei.uvigo.es/ws/familia#hasSiblings> ?z),
-    (?y <http://www.esei.uvigo.es/ws/familia#hasGender> <http://www.esei.uvigo.es/ws/familia#Fem>)
+    (?z <http://www.esei.uvigo.es/ws/familia#hasGender> <http://www.esei.uvigo.es/ws/familia#Fem>)
     -> (?x <http://www.esei.uvigo.es/ws/familia#hasAunt> ?z)
 ]
