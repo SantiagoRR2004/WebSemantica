@@ -14,10 +14,10 @@ public class App {
     // Consulta 1: Países cuyos nombres comienzan con la letra 'A'
     String q1;
     try {
-        q1 = Files.readString(Paths.get(System.getProperty("user.dir"), "queries", "q1.sparql"));
+      q1 = Files.readString(Paths.get(System.getProperty("user.dir"), "queries", "q1.sparql"));
     } catch (Exception e) {
-        System.err.println("Error reading q1.sparql: " + e.getMessage());
-        return;
+      System.err.println("Error reading q1.sparql: " + e.getMessage());
+      return;
     }
     runner.runQuery(q1);
 
