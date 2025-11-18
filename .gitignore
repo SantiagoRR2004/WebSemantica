@@ -1,6 +1,11 @@
 # From maven
 target/
 
+# Fuseki
+apache-jena-fuseki*
+apache-jena-fuseki*/
+run/
+
 # From the RDF creator
 *Graph*.json
 rdfCreator/*.ttl

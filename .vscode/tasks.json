@@ -1,23 +1,60 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "label": "Install Java Extensions (without IntelliCode)",
-        "type": "shell",
-        "command": "code --install-extension redhat.java && code --install-extension vscjava.vscode-java-debug && code --install-extension vscjava.vscode-java-test && code --install-extension vscjava.vscode-maven && code --install-extension vscjava.vscode-gradle && code --install-extension vscjava.vscode-java-dependency",
-        "group": {
-          "kind": "build",
-          "isDefault": true
-        },
-        "presentation": {
-          "reveal": "silent",
-          "focus": false,
-          "panel": "new"
-        },
-        "runOptions": {
-          "runOn": "folderOpen" // Run this task when the folder is opened
-        },
-        "problemMatcher": []
-      }
-    ]
-  }
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Download Fuseki",
+      "type": "shell",
+      "command": "./downloadFuseki.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "runOptions": {
+        "runOn": "folderOpen" // Run this task when the folder is opened
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install Java Extensions (without IntelliCode)",
+      "type": "shell",
+      "command": "code --install-extension redhat.java && code --install-extension vscjava.vscode-java-debug && code --install-extension vscjava.vscode-java-test && code --install-extension vscjava.vscode-maven && code --install-extension vscjava.vscode-gradle && code --install-extension vscjava.vscode-java-dependency",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "focus": false,
+        "panel": "new"
+      },
+      "runOptions": {
+        "runOn": "folderOpen" // Run this task when the folder is opened
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Lauching Fuseki",
+      "type": "shell",
+      "command": "./apache-jena-fuseki/fuseki-server",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "runOptions": {
+        "runOn": "folderOpen" // Run this task when the folder is opened
+      },
+      "problemMatcher": [],
+      "dependsOn": ["Download Fuseki"]
+    }
+  ]
+}
