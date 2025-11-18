@@ -1,6 +1,5 @@
 package practica.sparql;
 
-
 public class App {
   public static void main(String[] args) {
     SparqlRunner runner = new SparqlRunner("src/main/resources/europe.ttl");
@@ -164,11 +163,13 @@ public class App {
         """;
     runner.runConstructQuery(q10); // We have added this method call to run the CONSTRUCT query
 
-    // Consulta 11: Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la posición de
-    //cada país europeo en función de su PIB per cápita, de mayor a menor.
-    // The only way I found to do this is by counting how many countries have a higher GDP per capita than the current one.
+    // Consulta 11: Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la
+    // posición de
+    // cada país europeo en función de su PIB per cápita, de mayor a menor.
+    // The only way I found to do this is by counting how many countries have a higher GDP per
+    // capita than the current one.
     // Use OPTIONAL because the highest GDP country will not have any.
-    String q11 = 
+    String q11 =
         """
         PREFIX ex: <http://example.org/europe#>
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -191,6 +192,6 @@ public class App {
             }
         }
         """;
-    runner.runConstructQuery(q11); 
+    runner.runConstructQuery(q11);
   }
 }
