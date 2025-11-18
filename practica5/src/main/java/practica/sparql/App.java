@@ -142,13 +142,55 @@ public class App {
             ?country a ex:Country ;
             ex:gdpPerCapitaUSD ?gdp;
             ex:population ?p.
-            FILTER(?p >= (?pSpain *0.7) && ?p <= (?pSpain *1.3) && ?gdp > ?gdpSpain)
+            FILTER(ABS(?p - ?pSpain) <= (?pSpain *0.3) && ?gdp > ?gdpSpain)
         }
         ORDER BY DESC(?gdp)
         """;
     runner.runQuery(q9);
 
-    // Consulta 10: Propiedad que indique el PIB en euros.
-    // Entiendo que es con CONSTRUCT
+    // Consulta 10: Crear propiedad que indique el PIB en euros.
+    String q10 =
+        """
+        PREFIX ex: <http://example.org/europe#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        CONSTRUCT {
+            ?country ex:gdpPerCapitaEUR ?gdpEur.
+        }
+        WHERE {
+            ?country a ex:Country ;
+            ex:gdpPerCapitaUSD ?gdpUsd.
+            BIND( (?gdpUsd * 0.85) AS ?gdpEur)
+        }
+        """;
+    runner.runConstructQuery(q10); // We have added this method call to run the CONSTRUCT query
+
+    // Consulta 11: Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la posición de
+    //cada país europeo en función de su PIB per cápita, de mayor a menor.
+    // The only way I found to do this is by counting how many countries have a higher GDP per capita than the current one.
+    // Use OPTIONAL because the highest GDP country will not have any.
+    String q11 = 
+        """
+        PREFIX ex: <http://example.org/europe#>
+        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+        CONSTRUCT {
+            ?country ex:gdpRank ?rank.
+        }
+        WHERE {
+            {
+                SELECT ?country (COUNT(?higherGdp) AS ?rank)
+                WHERE {
+                    ?country a ex:Country ;
+                    ex:gdpPerCapitaUSD ?gdp.
+                    OPTIONAL {
+                        ?higherGdp a ex:Country ;
+                        ex:gdpPerCapitaUSD ?higherGdpValue.
+                        FILTER(?higherGdpValue > ?gdp)
+                    }
+                }
+                GROUP BY ?country
+            }
+        }
+        """;
+    runner.runConstructQuery(q11); 
   }
 }

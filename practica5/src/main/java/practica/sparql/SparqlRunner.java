@@ -25,4 +25,12 @@ public class SparqlRunner {
       ResultSetFormatter.out(System.out, results, query);
     }
   }
+  public void runConstructQuery(String queryStr) {
+    System.out.println(" \n==== EJECUTANDO CONSULTA CONSTRUCT ====\n");
+    Query query = QueryFactory.create(queryStr);
+    try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
+      Model constructModel = qexec.execConstruct();
+      constructModel.write(System.out, "TURTLE");
+    }
+  }
 }
