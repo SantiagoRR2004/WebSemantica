@@ -1,4 +1,4 @@
-Results of each consult using Sparql + Jena:
+Results of each consultation using Sparql + Jena:
 1-
 --------------------------
 | country    | name      |
