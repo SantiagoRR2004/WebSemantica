@@ -1,0 +1,9 @@
+PREFIX ex: <http://example.org/europe#>
+
+SELECT ?country ?name
+WHERE {
+    ?country a ex:Country ;
+    ex:countryName ?name .
+    FILTER(STRSTARTS(?name, "A"))
+}
+ORDER BY ?name

@@ -1,5 +1,6 @@
 package practica.sparql;
 
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class App {
@@ -11,17 +12,13 @@ public class App {
     SparqlRunner runner = new SparqlRunner(inputFileName);
 
     // Consulta 1: Países cuyos nombres comienzan con la letra 'A'
-    String q1 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?name
-            WHERE {
-            ?country a ex:Country ;
-            ex:countryName ?name .
-            FILTER(STRSTARTS(?name, "A"))
-            }
-            ORDER BY ?name
-        """;
+    String q1;
+    try {
+        q1 = Files.readString(Paths.get(System.getProperty("user.dir"), "queries", "q1.sparql"));
+    } catch (Exception e) {
+        System.err.println("Error reading q1.sparql: " + e.getMessage());
+        return;
+    }
     runner.runQuery(q1);
 
     // Consulta 2: Paises cuyo nombre termina por  "a":
