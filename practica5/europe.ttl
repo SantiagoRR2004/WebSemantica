@@ -1,0 +1,342 @@
+@prefix ex: <http://example.org/europe#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+ex:Country a rdfs:Class .
+
+ex:countryName       a rdf:Property ;
+    rdfs:domain ex:Country ;
+    rdfs:range  xsd:string .
+
+ex:gdpPerCapitaUSD  a rdf:Property ;
+    rdfs:label "PIB per cápita (US$ actuales, aprox. 2024)"@es ;
+    rdfs:domain ex:Country ;
+    rdfs:range  xsd:decimal .
+
+ex:population        a rdf:Property ;
+    rdfs:label "Población total reciente"@es ;
+    rdfs:domain ex:Country ;
+    rdfs:range  xsd:integer .
+    
+###############
+### A
+###############
+
+ex:Albania rdf:type ex:Country ;
+    ex:countryName "Albania" ;
+    ex:gdpPerCapitaUSD 6580 ;
+    ex:population 2840000 .
+
+ex:Andorra rdf:type ex:Country ;
+    ex:countryName "Andorra" ;
+    ex:gdpPerCapitaUSD 42200 ;
+    ex:population 79000 .
+
+ex:Armenia rdf:type ex:Country ;
+    ex:countryName "Armenia" ;
+    ex:gdpPerCapitaUSD 6250 ;
+    ex:population 2780000 .
+
+ex:Austria rdf:type ex:Country ;
+    ex:countryName "Austria" ;
+    ex:gdpPerCapitaUSD 55900 ;
+    ex:population 9006000 .
+
+###############
+### B
+###############
+
+ex:Belarus rdf:type ex:Country ;
+    ex:countryName "Belarus" ;
+    ex:gdpPerCapitaUSD 7100 ;
+    ex:population 9400000 .
+
+ex:Belgium rdf:type ex:Country ;
+    ex:countryName "Belgium" ;
+    ex:gdpPerCapitaUSD 58400 ;
+    ex:population 11590000 .
+
+ex:BosniaAndHerzegovina rdf:type ex:Country ;
+    ex:countryName "Bosnia and Herzegovina" ;
+    ex:gdpPerCapitaUSD 7200 ;
+    ex:population 3270000 .
+
+ex:Bulgaria rdf:type ex:Country ;
+    ex:countryName "Bulgaria" ;
+    ex:gdpPerCapitaUSD 12600 ;
+    ex:population 6800000 .
+
+###############
+### C
+###############
+
+ex:Croatia rdf:type ex:Country ;
+    ex:countryName "Croatia" ;
+    ex:gdpPerCapitaUSD 17800 ;
+    ex:population 3900000 .
+
+ex:Cyprus rdf:type ex:Country ;
+    ex:countryName "Cyprus" ;
+    ex:gdpPerCapitaUSD 30200 ;
+    ex:population 1220000 .
+
+ex:CzechRepublic rdf:type ex:Country ;
+    ex:countryName "Czech Republic" ;
+    ex:gdpPerCapitaUSD 26800 ;
+    ex:population 10500000 .
+
+###############
+### D
+###############
+
+ex:Denmark rdf:type ex:Country ;
+    ex:countryName "Denmark" ;
+    ex:gdpPerCapitaUSD 67500 ;
+    ex:population 5830000 .
+
+###############
+### E
+###############
+
+ex:Estonia rdf:type ex:Country ;
+    ex:countryName "Estonia" ;
+    ex:gdpPerCapitaUSD 28500 ;
+    ex:population 1330000 .
+
+###############
+### F
+###############
+
+ex:Finland rdf:type ex:Country ;
+    ex:countryName "Finland" ;
+    ex:gdpPerCapitaUSD 53400 ;
+    ex:population 5540000 .
+
+ex:France rdf:type ex:Country ;
+    ex:countryName "France" ;
+    ex:gdpPerCapitaUSD 43700 ;
+    ex:population 67400000 .
+
+###############
+### G
+###############
+
+ex:Georgia rdf:type ex:Country ;
+    ex:countryName "Georgia" ;
+    ex:gdpPerCapitaUSD 7200 ;
+    ex:population 3710000 .
+
+ex:Germany rdf:type ex:Country ;
+    ex:countryName "Germany" ;
+    ex:gdpPerCapitaUSD 51600 ;
+    ex:population 83200000 .
+
+ex:Greece rdf:type ex:Country ;
+    ex:countryName "Greece" ;
+    ex:gdpPerCapitaUSD 22600 ;
+    ex:population 10700000 .
+
+###############
+### H
+###############
+
+ex:Hungary rdf:type ex:Country ;
+    ex:countryName "Hungary" ;
+    ex:gdpPerCapitaUSD 18900 ;
+    ex:population 9600000 .
+
+###############
+### I
+###############
+
+ex:Iceland rdf:type ex:Country ;
+    ex:countryName "Iceland" ;
+    ex:gdpPerCapitaUSD 59100 ;
+    ex:population 372000 .
+
+ex:Ireland rdf:type ex:Country ;
+    ex:countryName "Ireland" ;
+    ex:gdpPerCapitaUSD 100200 ;
+    ex:population 5030000 .
+
+ex:Italy rdf:type ex:Country ;
+    ex:countryName "Italy" ;
+    ex:gdpPerCapitaUSD 35500 ;
+    ex:population 59500000 .
+
+###############
+### K
+###############
+
+ex:Kosovo rdf:type ex:Country ;
+    ex:countryName "Kosovo" ;
+    ex:gdpPerCapitaUSD 5400 ;
+    ex:population 1780000 .
+
+###############
+### L
+###############
+
+ex:Latvia rdf:type ex:Country ;
+    ex:countryName "Latvia" ;
+    ex:gdpPerCapitaUSD 20500 ;
+    ex:population 1850000 .
+
+ex:Liechtenstein rdf:type ex:Country ;
+    ex:countryName "Liechtenstein" ;
+    ex:gdpPerCapitaUSD 180000 ;
+    ex:population 39000 .
+
+ex:Lithuania rdf:type ex:Country ;
+    ex:countryName "Lithuania" ;
+    ex:gdpPerCapitaUSD 23800 ;
+    ex:population 2790000 .
+
+ex:Luxembourg rdf:type ex:Country ;
+    ex:countryName "Luxembourg" ;
+    ex:gdpPerCapitaUSD 135700 ;
+    ex:population 645000 .
+
+###############
+### M
+###############
+
+ex:Malta rdf:type ex:Country ;
+    ex:countryName "Malta" ;
+    ex:gdpPerCapitaUSD 32700 ;
+    ex:population 520000 .
+
+ex:Moldova rdf:type ex:Country ;
+    ex:countryName "Moldova" ;
+    ex:gdpPerCapitaUSD 5700 ;
+    ex:population 2600000 .
+
+ex:Monaco rdf:type ex:Country ;
+    ex:countryName "Monaco" ;
+    ex:gdpPerCapitaUSD 173000 ;
+    ex:population 39000 .
+
+ex:Montenegro rdf:type ex:Country ;
+    ex:countryName "Montenegro" ;
+    ex:gdpPerCapitaUSD 8600 ;
+    ex:population 620000 .
+
+###############
+### N
+###############
+
+ex:Netherlands rdf:type ex:Country ;
+    ex:countryName "Netherlands" ;
+    ex:gdpPerCapitaUSD 57400 ;
+    ex:population 17700000 .
+
+ex:NorthMacedonia rdf:type ex:Country ;
+    ex:countryName "North Macedonia" ;
+    ex:gdpPerCapitaUSD 7200 ;
+    ex:population 2070000 .
+
+ex:Norway rdf:type ex:Country ;
+    ex:countryName "Norway" ;
+    ex:gdpPerCapitaUSD 89200 ;
+    ex:population 5400000 .
+
+###############
+### P
+###############
+
+ex:Poland rdf:type ex:Country ;
+    ex:countryName "Poland" ;
+    ex:gdpPerCapitaUSD 18600 ;
+    ex:population 37800000 .
+
+ex:Portugal rdf:type ex:Country ;
+    ex:countryName "Portugal" ;
+    ex:gdpPerCapitaUSD 25300 ;
+    ex:population 10300000 .
+
+###############
+### R
+###############
+
+ex:Romania rdf:type ex:Country ;
+    ex:countryName "Romania" ;
+    ex:gdpPerCapitaUSD 16800 ;
+    ex:population 19200000 .
+
+ex:Russia rdf:type ex:Country ;
+    ex:countryName "Russia" ;
+    ex:gdpPerCapitaUSD 13400 ;
+    ex:population 144700000 .
+
+###############
+### S
+###############
+
+ex:SanMarino rdf:type ex:Country ;
+    ex:countryName "San Marino" ;
+    ex:gdpPerCapitaUSD 51800 ;
+    ex:population 34000 .
+
+ex:Serbia rdf:type ex:Country ;
+    ex:countryName "Serbia" ;
+    ex:gdpPerCapitaUSD 9600 ;
+    ex:population 6800000 .
+
+ex:Slovakia rdf:type ex:Country ;
+    ex:countryName "Slovakia" ;
+    ex:gdpPerCapitaUSD 20900 ;
+    ex:population 5450000 .
+
+ex:Slovenia rdf:type ex:Country ;
+    ex:countryName "Slovenia" ;
+    ex:gdpPerCapitaUSD 28400 ;
+    ex:population 2100000 .
+
+ex:Spain rdf:type ex:Country ;
+    ex:countryName "Spain" ;
+    ex:gdpPerCapitaUSD 34100 ;
+    ex:population 47400000 .
+
+ex:Sweden rdf:type ex:Country ;
+    ex:countryName "Sweden" ;
+    ex:gdpPerCapitaUSD 59800 ;
+    ex:population 10500000 .
+
+ex:Switzerland rdf:type ex:Country ;
+    ex:countryName "Switzerland" ;
+    ex:gdpPerCapitaUSD 88400 ;
+    ex:population 8750000 .
+
+###############
+### T
+###############
+
+ex:Turkey rdf:type ex:Country ;
+    ex:countryName "Turkey" ;
+    ex:gdpPerCapitaUSD 10500 ;
+    ex:population 85300000 .
+
+###############
+### U
+###############
+
+ex:Ukraine rdf:type ex:Country ;
+    ex:countryName "Ukraine" ;
+    ex:gdpPerCapitaUSD 4600 ;
+    ex:population 37600000 .
+
+ex:UnitedKingdom rdf:type ex:Country ;
+    ex:countryName "United Kingdom" ;
+    ex:gdpPerCapitaUSD 46900 ;
+    ex:population 67000000 .
+
+###############
+### V
+###############
+
+ex:VaticanCity rdf:type ex:Country ;
+    ex:countryName "Vatican City" ;
+    ex:population 800 .
+
+
