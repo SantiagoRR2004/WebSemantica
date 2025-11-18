@@ -1,5 +1,8 @@
-Results of each consultation using Sparql + Jena:
-1-
+# Europe
+
+## Mostrar países cuyo nombre empieza por “A”
+
+```text
 --------------------------
 | country    | name      |
 ==========================
@@ -8,8 +11,11 @@ Results of each consultation using Sparql + Jena:
 | ex:Armenia | "Armenia" |
 | ex:Austria | "Austria" |
 --------------------------
+```
 
-2-
+## Paises cuyo nombre termina por  "a"
+
+```text
 ------------------------------------------------------
 | country                 | name                     |
 ======================================================
@@ -33,9 +39,11 @@ Results of each consultation using Sparql + Jena:
 | ex:Slovakia             | "Slovakia"               |
 | ex:Slovenia             | "Slovenia"               |
 ------------------------------------------------------
- 
-3-
+```
 
+## Empiezan por "A" y terminan por "a"
+
+```text
 --------------------------
 | country    | name      |
 ==========================
@@ -44,9 +52,11 @@ Results of each consultation using Sparql + Jena:
 | ex:Armenia | "Armenia" |
 | ex:Austria | "Austria" |
 --------------------------
+```
 
-4-
+## Cuyo PIB per capita es mayor que 20.000
 
+```text
 -----------------------------
 | country          | gdp    |
 =============================
@@ -81,9 +91,11 @@ Results of each consultation using Sparql + Jena:
 | ex:Switzerland   | 88400  |
 | ex:UnitedKingdom | 46900  |
 -----------------------------
- 
-5-
+```
 
+## PIB es mayor que 20 000 y su población es menor de 40 millones
+
+```text
 ----------------------------------------
 | country          | gdp    | p        |
 ========================================
@@ -113,25 +125,31 @@ Results of each consultation using Sparql + Jena:
 | ex:Sweden        | 59800  | 10500000 |
 | ex:Switzerland   | 88400  | 8750000  |
 ----------------------------------------
- 
-6-
+```
 
+## País con mayor PIB
+
+```text
 -----------------------------
 | country          | gdp    |
 =============================
 | ex:Liechtenstein | 180000 |
 -----------------------------
- 
-7-
+```
 
+## Calcular PIB medio
+
+```text
 -------------
 | avgGdp    |
 =============
 | 40156.875 |
 -------------
- 
-8-
+```
 
+## Países con PIB superior al PIB medio
+
+```text
 -----------------------------
 | country          | gdp    |
 =============================
@@ -154,17 +172,21 @@ Results of each consultation using Sparql + Jena:
 | ex:France        | 43700  |
 | ex:Andorra       | 42200  |
 -----------------------------
- 
-9-
+```
 
+## Países con población similar a España (+- 30%) con mayor PIB
+
+```text
 -------------------------------
 | country  | gdp   | p        |
 ===============================
 | ex:Italy | 35500 | 59500000 |
 -------------------------------
- 
-10-
+```
 
+## Crear una propiedad que indique el PIB en euros
+
+```turtle
 PREFIX ex:   <http://example.org/europe#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -266,10 +288,11 @@ ex:Liechtenstein  ex:gdpPerCapitaEUR  153000.0 .
 ex:Kosovo  ex:gdpPerCapitaEUR  4590.0 .
 
 ex:Romania  ex:gdpPerCapitaEUR  14280.0 .
- 
-11-
+```
 
+## Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la posición de cada país europeo en función de su PIB per cápita, de mayor a menor
 
+```turtle
 PREFIX ex:   <http://example.org/europe#>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -371,3 +394,4 @@ ex:Armenia  ex:gdpRank  44 .
 ex:Belgium  ex:gdpRank  9 .
 
 ex:Austria  ex:gdpRank  11 .
+```
