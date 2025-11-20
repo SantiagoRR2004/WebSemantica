@@ -1,5 +1,6 @@
 package practica.sparql;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -7,6 +8,8 @@ public class App {
   static final String inputFileName =
       Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "europe.ttl")
           .toString();
+  static final String queryFolder =
+      Paths.get(System.getProperty("user.dir"), "queries").toString();
 
   private static String wrapWithService(String query, String serviceUrl) {
     // Extract PREFIX declarations
@@ -67,108 +70,47 @@ public class App {
   public static void main(String[] args) {
     SparqlRunner runner = new SparqlRunner(inputFileName);
 
-    // Consulta 1: Países cuyos nombres comienzan con la letra 'A'
-    String q1 = readQuery("q1.sparql");
-    runner.runQuery(q1);
+    File folder = new File(queryFolder);
+    File[] listOfFiles = folder.listFiles();
 
-    // Consulta 2: Paises cuyo nombre termina por  "a":
-    String q2 = readQuery("q2.sparql");
-    runner.runQuery(q2);
+    // Sort files to ensure consistent order
+    if (listOfFiles != null) {
+      java.util.Arrays.sort(listOfFiles);
+    }
 
-    // Consulta 3: Empiezan por "A" y terminan por "a"
-    String q3 = readQuery("q3.sparql");
-    runner.runQuery(q3);
+    for (File file : listOfFiles) {
+      String q = readQuery(file.getName());
+      String qNormal;
+      try {
+        qNormal = runner.runQueryAndCapture(q);
+      } catch (Exception e) {
+        qNormal = runner.runConstructQueryAndCapture(q);
+      }
 
-    // Consulta 4: Cuyo PIB per capita es mayor que 20.000
-    String q4 = readQuery("q4.sparql");
-    runner.runQuery(q4);
+      // Wrap with SERVICE
+      q = wrapWithService(q, "http://localhost:3030/europe/sparql");
+      String qService;
+      try {
+        qService = runner.runQueryAndCapture(q);
+      } catch (Exception e) {
+        qService = runner.runConstructQueryAndCapture(q);
+      }
 
-    // Consulta 5:  PIB es mayor que 20 000 y su población es menor de 40 millones
-    String q5 = readQuery("q5.sparql");
-    runner.runQuery(q5);
+      // Compare results
+      if (!qNormal.equals(qService)) {
+        throw new RuntimeException(
+            "Query results mismatch for "
+                + file.getName()
+                + ": Normal and SERVICE queries produced different results!");
+      }
 
-    // Consulta 6: País con mayor PIB
-    String q6 = readQuery("q6.sparql");
-    runner.runQuery(q6);
+      try {
+        runner.runQuery(q);
+      } catch (Exception e) {
+        runner.runConstructQuery(q);
+      }
+    }
 
-    // Consulta 7: Calcular PIB medio
-    String q7 = readQuery("q7.sparql");
-    runner.runQuery(q7);
 
-    // Consulta 8: Países con PIB superior al PIB medio
-    String q8 = readQuery("q8.sparql");
-    runner.runQuery(q8);
-
-    // Consulta 9: Países con población similar a España (+- 30%) con mayor PIB.
-    String q9 = readQuery("q9.sparql");
-    runner.runQuery(q9);
-
-    // Consulta 10: Crear propiedad que indique el PIB en euros.
-    String q10 = readQuery("q10.sparql");
-    runner.runConstructQuery(q10); // We have added this method call to run the CONSTRUCT query
-
-    // Consulta 11: Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la
-    // posición de
-    // cada país europeo en función de su PIB per cápita, de mayor a menor.
-    // The only way I found to do this is by counting how many countries have a higher GDP per
-    // capita than the current one.
-    // Use OPTIONAL because the highest GDP country will not have any.
-    String q11 = readQuery("q11.sparql");
-    runner.runConstructQuery(q11);
-
-    /*
-     *
-     * SAME CONSULTATIONS BUT WITH http://localhost:3030/europe/sparql
-     *
-     */
-
-    // Consulta 1: Países cuyos nombres comienzan con la letra 'A'
-    q1 = wrapWithService(q1, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q1);
-
-    // Consulta 2: Paises cuyo nombre termina por  "a":
-    q2 = wrapWithService(q2, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q2);
-
-    // Consulta 3: Empiezan por "A" y terminan por "a"
-    q3 = wrapWithService(q3, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q3);
-
-    // Consulta 4: Cuyo PIB per capita es mayor que 20.000
-    q4 = wrapWithService(q4, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q4);
-
-    // Consulta 5:  PIB es mayor que 20 000 y su población es menor de 40 millones
-    q5 = wrapWithService(q5, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q5);
-
-    // Consulta 6: País con mayor PIB
-    q6 = wrapWithService(q6, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q6);
-
-    // Consulta 7: Calcular PIB medio
-    q7 = wrapWithService(q7, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q7);
-
-    // Consulta 8: Países con PIB superior al PIB medio
-    q8 = wrapWithService(q8, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q8);
-
-    // Consulta 9: Países con población similar a España (+- 30%) con mayor PIB.
-    q9 = wrapWithService(q9, "http://localhost:3030/europe/sparql");
-    runner.runQuery(q9);
-
-    // Consulta 10: Crear propiedad que indique el PIB en euros.
-    q10 = wrapWithService(q10, "http://localhost:3030/europe/sparql");
-    runner.runConstructQuery(q10); // We have added this method call to run the CONSTRUCT query
-
-    // Consulta 11: Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la
-    // posición de
-    // cada país europeo en función de su PIB per cápita, de mayor a menor.
-    // The only way I found to do this is by counting how many countries have a higher GDP per
-    // capita than the current one.
-    // Use OPTIONAL because the highest GDP country will not have any.
-    q11 = wrapWithService(q11, "http://localhost:3030/europe/sparql");
-    runner.runConstructQuery(q11);
   }
 }

@@ -1,6 +1,9 @@
 PREFIX ex: <http://example.org/europe#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
+# The only way I found to do this is by counting how many countries have a higher GDP per
+# capita than the current one.
+
 CONSTRUCT {
     ?country ex:gdpRank ?rank.
 }
@@ -10,7 +13,7 @@ WHERE {
         WHERE {
             ?country a ex:Country ;
             ex:gdpPerCapitaUSD ?gdp.
-            OPTIONAL {
+            OPTIONAL { # Use OPTIONAL because the highest GDP country will not have any higher GDP
                 ?higherGdp a ex:Country ;
                 ex:gdpPerCapitaUSD ?higherGdpValue.
                 FILTER(?higherGdpValue > ?gdp)
