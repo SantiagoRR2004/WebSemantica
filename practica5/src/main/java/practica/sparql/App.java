@@ -12,10 +12,10 @@ public class App {
     // Extract PREFIX declarations
     StringBuilder prefixes = new StringBuilder();
     StringBuilder queryBody = new StringBuilder();
-    
+
     String[] lines = query.split("\n");
     boolean inPrefixes = true;
-    
+
     for (String line : lines) {
       String trimmedLine = line.trim();
       if (inPrefixes && trimmedLine.toUpperCase().startsWith("PREFIX")) {
@@ -25,31 +25,34 @@ public class App {
         queryBody.append(line).append("\n");
       }
     }
-    
+
     // Find WHERE clause and wrap its content with SERVICE
     String body = queryBody.toString();
     int whereIndex = body.toUpperCase().indexOf("WHERE");
     if (whereIndex == -1) {
       return query; // Return original if no WHERE clause found
     }
-    
+
     int openBrace = body.indexOf("{", whereIndex);
     int closeBrace = body.lastIndexOf("}");
-    
+
     if (openBrace == -1 || closeBrace == -1) {
       return query; // Return original if malformed
     }
-    
+
     String beforeWhere = body.substring(0, openBrace + 1);
     String whereContent = body.substring(openBrace + 1, closeBrace);
     String afterWhere = body.substring(closeBrace);
-    
-    return prefixes.toString() +
-           beforeWhere + "\n" +
-           "    SERVICE <" + serviceUrl + "> {\n" +
-           whereContent +
-           "    }\n" +
-           afterWhere;
+
+    return prefixes.toString()
+        + beforeWhere
+        + "\n"
+        + "    SERVICE <"
+        + serviceUrl
+        + "> {\n"
+        + whereContent
+        + "    }\n"
+        + afterWhere;
   }
 
   public static void main(String[] args) {
