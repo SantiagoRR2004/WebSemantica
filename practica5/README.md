@@ -1,6 +1,6 @@
 # Europe
 
-## Mostrar países cuyo nombre empieza por “A”
+## [Mostrar países cuyo nombre empieza por “A”](./queries/q1.sparql)
 
 ```text
 --------------------------
@@ -13,7 +13,7 @@
 --------------------------
 ```
 
-## Paises cuyo nombre termina por  "a"
+## [Mostrar países cuyo nombre termina por “a”](./queries/q2.sparql)
 
 ```text
 ------------------------------------------------------
@@ -41,7 +41,7 @@
 ------------------------------------------------------
 ```
 
-## Empiezan por "A" y terminan por "a"
+## [Mostrar países cuyo nombre empieza por “A” y termina en “a”](./queries/q3.sparql)
 
 ```text
 --------------------------
@@ -54,7 +54,7 @@
 --------------------------
 ```
 
-## Cuyo PIB per capita es mayor que 20.000
+## [Mostrar países cuyo PIB per cápita es mayor que 20.000](./queries/q4.sparql)
 
 ```text
 -----------------------------
@@ -93,7 +93,7 @@
 -----------------------------
 ```
 
-## PIB es mayor que 20 000 y su población es menor de 40 millones
+## [Mostrar países cuyo PIB es mayor que 20 000 y su población es menor de 40 millones](./queries/q5.sparql)
 
 ```text
 ----------------------------------------
@@ -127,7 +127,7 @@
 ----------------------------------------
 ```
 
-## País con mayor PIB
+## [Mostrar el país con mayor PIB](./queries/q6.sparql)
 
 ```text
 -----------------------------
@@ -137,7 +137,7 @@
 -----------------------------
 ```
 
-## Calcular PIB medio
+## [Calcular el PIB medio](./queries/q7.sparql)
 
 ```text
 -------------
@@ -147,7 +147,7 @@
 -------------
 ```
 
-## Países con PIB superior al PIB medio
+## [Mostrar los países cuyo PIB es mayor que el PIB medio](./queries/q8.sparql)
 
 ```text
 -----------------------------
@@ -174,7 +174,7 @@
 -----------------------------
 ```
 
-## Países con población similar a España (+- 30%) con mayor PIB
+## [Mostrar países con población similar a España cuyo PIB esté por encima](./queries/q9.sparql)
 
 ```text
 -------------------------------
@@ -184,7 +184,7 @@
 -------------------------------
 ```
 
-## Crear una propiedad que indique el PIB en euros
+## [Crear una propiedad que indique el PIB en euros](./queries/q10.sparql)
 
 ```turtle
 PREFIX ex:   <http://example.org/europe#>
@@ -290,7 +290,7 @@ ex:Kosovo  ex:gdpPerCapitaEUR  4590.0 .
 ex:Romania  ex:gdpPerCapitaEUR  14280.0 .
 ```
 
-## Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la posición de cada país europeo en función de su PIB per cápita, de mayor a menor
+## [Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la posición de cada país europeo en función de su PIB per cápita, de mayor a menor](./queries/q11.sparql)
 
 ```turtle
 PREFIX ex:   <http://example.org/europe#>

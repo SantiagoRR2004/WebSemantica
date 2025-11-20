@@ -1,2 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+*.sparql linguist-language=SPARQL
+*.ttl linguist-language=Turtle
