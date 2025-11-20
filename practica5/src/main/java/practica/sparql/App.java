@@ -8,6 +8,50 @@ public class App {
       Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "europe.ttl")
           .toString();
 
+  private static String wrapWithService(String query, String serviceUrl) {
+    // Extract PREFIX declarations
+    StringBuilder prefixes = new StringBuilder();
+    StringBuilder queryBody = new StringBuilder();
+    
+    String[] lines = query.split("\n");
+    boolean inPrefixes = true;
+    
+    for (String line : lines) {
+      String trimmedLine = line.trim();
+      if (inPrefixes && trimmedLine.toUpperCase().startsWith("PREFIX")) {
+        prefixes.append(line).append("\n");
+      } else {
+        inPrefixes = false;
+        queryBody.append(line).append("\n");
+      }
+    }
+    
+    // Find WHERE clause and wrap its content with SERVICE
+    String body = queryBody.toString();
+    int whereIndex = body.toUpperCase().indexOf("WHERE");
+    if (whereIndex == -1) {
+      return query; // Return original if no WHERE clause found
+    }
+    
+    int openBrace = body.indexOf("{", whereIndex);
+    int closeBrace = body.lastIndexOf("}");
+    
+    if (openBrace == -1 || closeBrace == -1) {
+      return query; // Return original if malformed
+    }
+    
+    String beforeWhere = body.substring(0, openBrace + 1);
+    String whereContent = body.substring(openBrace + 1, closeBrace);
+    String afterWhere = body.substring(closeBrace);
+    
+    return prefixes.toString() +
+           beforeWhere + "\n" +
+           "    SERVICE <" + serviceUrl + "> {\n" +
+           whereContent +
+           "    }\n" +
+           afterWhere;
+  }
+
   public static void main(String[] args) {
     SparqlRunner runner = new SparqlRunner(inputFileName);
 
@@ -204,19 +248,7 @@ public class App {
      */
 
     // Consulta 1: Países cuyos nombres comienzan con la letra 'A'
-    q1 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?name
-            WHERE {
-                SERVICE <http://localhost:3030/europe/sparql> {
-                    ?country a ex:Country ;
-                    ex:countryName ?name .
-                    FILTER(STRSTARTS(?name, "A"))
-                }
-            }
-            ORDER BY ?name
-        """;
+    q1 = wrapWithService(q1, "http://localhost:3030/europe/sparql");
     runner.runQuery(q1);
 
     // Consulta 2: Paises cuyo nombre termina por  "a":
