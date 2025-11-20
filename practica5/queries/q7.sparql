@@ -1,0 +1,7 @@
+PREFIX ex: <http://example.org/europe#>
+
+SELECT (avg(?gdp) AS ?avgGdp)
+WHERE {
+    ?country a ex:Country ;
+    ex:gdpPerCapitaUSD ?gdp.
+}

@@ -1,0 +1,11 @@
+PREFIX ex: <http://example.org/europe#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+    ?country ex:gdpPerCapitaEUR ?gdpEur.
+}
+WHERE {
+    ?country a ex:Country ;
+    ex:gdpPerCapitaUSD ?gdpUsd.
+    BIND( (?gdpUsd * 0.85) AS ?gdpEur)
+}

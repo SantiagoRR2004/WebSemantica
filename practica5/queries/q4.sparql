@@ -1,0 +1,9 @@
+PREFIX ex: <http://example.org/europe#>
+
+SELECT ?country ?gdp
+WHERE {
+    ?country a ex:Country ;
+    ex:gdpPerCapitaUSD ?gdp.
+    FILTER(?gdp > 20000)
+}
+ORDER BY ?name

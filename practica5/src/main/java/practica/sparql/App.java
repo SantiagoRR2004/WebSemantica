@@ -55,162 +55,56 @@ public class App {
         + afterWhere;
   }
 
+  private static String readQuery(String fileName) {
+    try {
+      return Files.readString(Paths.get(System.getProperty("user.dir"), "queries", fileName));
+    } catch (Exception e) {
+      System.err.println("Error reading " + fileName + ": " + e.getMessage());
+      return null;
+    }
+  }
+
   public static void main(String[] args) {
     SparqlRunner runner = new SparqlRunner(inputFileName);
 
     // Consulta 1: Países cuyos nombres comienzan con la letra 'A'
-    String q1;
-    try {
-      q1 = Files.readString(Paths.get(System.getProperty("user.dir"), "queries", "q1.sparql"));
-    } catch (Exception e) {
-      System.err.println("Error reading q1.sparql: " + e.getMessage());
-      return;
-    }
+    String q1 = readQuery("q1.sparql");
     runner.runQuery(q1);
 
     // Consulta 2: Paises cuyo nombre termina por  "a":
-    String q2 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?name
-            WHERE {
-            ?country a ex:Country ;
-            ex:countryName ?name .
-            FILTER(STRENDS(?name, "a"))
-            }
-            ORDER BY ?name
-        """;
+    String q2 = readQuery("q2.sparql");
     runner.runQuery(q2);
 
     // Consulta 3: Empiezan por "A" y terminan por "a"
-    String q3 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?name
-            WHERE {
-            ?country a ex:Country ;
-            ex:countryName ?name .
-            FILTER(STRSTARTS(?name, "A") && STRENDS(?name, "a"))
-            }
-            ORDER BY ?name
-        """;
+    String q3 = readQuery("q3.sparql");
     runner.runQuery(q3);
 
     // Consulta 4: Cuyo PIB per capita es mayor que 20.000
-    String q4 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?gdp
-            WHERE {
-            ?country a ex:Country ;
-            ex:gdpPerCapitaUSD ?gdp.
-            FILTER(?gdp > 20000)
-            }
-            ORDER BY ?name
-        """;
+    String q4 = readQuery("q4.sparql");
     runner.runQuery(q4);
 
     // Consulta 5:  PIB es mayor que 20 000 y su población es menor de 40 millones
-    String q5 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?gdp ?p
-            WHERE {
-            ?country a ex:Country ;
-            ex:gdpPerCapitaUSD ?gdp;
-            ex:population ?p.
-            FILTER(?gdp > 20000 && ?p < 40000000)
-            }
-            ORDER BY ?name
-        """;
+    String q5 = readQuery("q5.sparql");
     runner.runQuery(q5);
 
     // Consulta 6: País con mayor PIB
-    String q6 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?gdp
-            WHERE {
-            ?country a ex:Country ;
-            ex:gdpPerCapitaUSD ?gdp.
-            }
-            ORDER BY DESC(?gdp)
-            LIMIT 1
-        """;
+    String q6 = readQuery("q6.sparql");
     runner.runQuery(q6);
 
     // Consulta 7: Calcular PIB medio
-    String q7 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT (avg(?gdp) AS ?avgGdp)
-            WHERE {
-            ?country a ex:Country ;
-            ex:gdpPerCapitaUSD ?gdp.
-            }
-        """;
+    String q7 = readQuery("q7.sparql");
     runner.runQuery(q7);
 
     // Consulta 8: Países con PIB superior al PIB medio
-    String q8 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?gdp
-            WHERE {
-                {
-                    SELECT (AVG(?g) AS ?avgGdp)
-                    WHERE {
-                        ?c a ex:Country ;
-                        ex:gdpPerCapitaUSD ?g.
-                    }
-                }
-                ?country a ex:Country ;
-                ex:gdpPerCapitaUSD ?gdp.
-                FILTER(?gdp > ?avgGdp)
-            }
-            ORDER BY DESC(?gdp)
-        """;
+    String q8 = readQuery("q8.sparql");
     runner.runQuery(q8);
 
     // Consulta 9: Países con población similar a España (+- 30%) con mayor PIB.
-    String q9 =
-        """
-                PREFIX ex: <http://example.org/europe#>
-                SELECT ?country ?gdp ?p
-                WHERE {
-                    {
-                        SELECT ?pSpain ?gdpSpain
-                        WHERE {
-                            ?c a ex:Country;
-                            ex:countryName ?name;
-                            ex:population ?pSpain;
-                            ex:gdpPerCapitaUSD ?gdpSpain.
-                            FILTER(?name = "Spain")
-                }
-            }
-            ?country a ex:Country ;
-            ex:gdpPerCapitaUSD ?gdp;
-            ex:population ?p.
-            FILTER(ABS(?p - ?pSpain) <= (?pSpain *0.3) && ?gdp > ?gdpSpain)
-        }
-        ORDER BY DESC(?gdp)
-        """;
+    String q9 = readQuery("q9.sparql");
     runner.runQuery(q9);
 
     // Consulta 10: Crear propiedad que indique el PIB en euros.
-    String q10 =
-        """
-        PREFIX ex: <http://example.org/europe#>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-        CONSTRUCT {
-            ?country ex:gdpPerCapitaEUR ?gdpEur.
-        }
-        WHERE {
-            ?country a ex:Country ;
-            ex:gdpPerCapitaUSD ?gdpUsd.
-            BIND( (?gdpUsd * 0.85) AS ?gdpEur)
-        }
-        """;
+    String q10 = readQuery("q10.sparql");
     runner.runConstructQuery(q10); // We have added this method call to run the CONSTRUCT query
 
     // Consulta 11: Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la
@@ -219,29 +113,7 @@ public class App {
     // The only way I found to do this is by counting how many countries have a higher GDP per
     // capita than the current one.
     // Use OPTIONAL because the highest GDP country will not have any.
-    String q11 =
-        """
-        PREFIX ex: <http://example.org/europe#>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-        CONSTRUCT {
-            ?country ex:gdpRank ?rank.
-        }
-        WHERE {
-            {
-                SELECT ?country (COUNT(?higherGdp) AS ?rank)
-                WHERE {
-                    ?country a ex:Country ;
-                    ex:gdpPerCapitaUSD ?gdp.
-                    OPTIONAL {
-                        ?higherGdp a ex:Country ;
-                        ex:gdpPerCapitaUSD ?higherGdpValue.
-                        FILTER(?higherGdpValue > ?gdp)
-                    }
-                }
-                GROUP BY ?country
-            }
-        }
-        """;
+    String q11 = readQuery("q11.sparql");
     runner.runConstructQuery(q11);
 
     /*
@@ -255,166 +127,39 @@ public class App {
     runner.runQuery(q1);
 
     // Consulta 2: Paises cuyo nombre termina por  "a":
-    q2 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?name
-            WHERE {
-                SERVICE <http://localhost:3030/europe/sparql> {
-                    ?country a ex:Country ;
-                    ex:countryName ?name .
-                    FILTER(STRENDS(?name, "a"))
-                }
-            }
-            ORDER BY ?name
-        """;
+    q2 = wrapWithService(q2, "http://localhost:3030/europe/sparql");
     runner.runQuery(q2);
 
     // Consulta 3: Empiezan por "A" y terminan por "a"
-    q3 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?name
-            WHERE {
-                SERVICE <http://localhost:3030/europe/sparql> {
-                    ?country a ex:Country ;
-                    ex:countryName ?name .
-                    FILTER(STRSTARTS(?name, "A") && STRENDS(?name, "a"))
-                }
-            }
-            ORDER BY ?name
-        """;
+    q3 = wrapWithService(q3, "http://localhost:3030/europe/sparql");
     runner.runQuery(q3);
 
     // Consulta 4: Cuyo PIB per capita es mayor que 20.000
-    q4 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?gdp
-            WHERE {
-                SERVICE <http://localhost:3030/europe/sparql> {
-                    ?country a ex:Country ;
-                    ex:gdpPerCapitaUSD ?gdp.
-                    FILTER(?gdp > 20000)
-                }
-            }
-            ORDER BY ?name
-        """;
+    q4 = wrapWithService(q4, "http://localhost:3030/europe/sparql");
     runner.runQuery(q4);
 
     // Consulta 5:  PIB es mayor que 20 000 y su población es menor de 40 millones
-    q5 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?gdp ?p
-            WHERE {
-                SERVICE <http://localhost:3030/europe/sparql> {
-                    ?country a ex:Country ;
-                    ex:gdpPerCapitaUSD ?gdp;
-                    ex:population ?p.
-                    FILTER(?gdp > 20000 && ?p < 40000000)
-                }
-            }
-            ORDER BY ?name
-        """;
+    q5 = wrapWithService(q5, "http://localhost:3030/europe/sparql");
     runner.runQuery(q5);
 
     // Consulta 6: País con mayor PIB
-    q6 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?gdp
-            WHERE {
-                SERVICE <http://localhost:3030/europe/sparql> {
-                    ?country a ex:Country ;
-                    ex:gdpPerCapitaUSD ?gdp.
-                }
-            }
-            ORDER BY DESC(?gdp)
-            LIMIT 1
-        """;
+    q6 = wrapWithService(q6, "http://localhost:3030/europe/sparql");
     runner.runQuery(q6);
 
     // Consulta 7: Calcular PIB medio
-    q7 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT (avg(?gdp) AS ?avgGdp)
-            WHERE {
-                SERVICE <http://localhost:3030/europe/sparql> {
-                    ?country a ex:Country ;
-                    ex:gdpPerCapitaUSD ?gdp.
-                }
-            }
-        """;
+    q7 = wrapWithService(q7, "http://localhost:3030/europe/sparql");
     runner.runQuery(q7);
 
     // Consulta 8: Países con PIB superior al PIB medio
-    q8 =
-        """
-            PREFIX ex: <http://example.org/europe#>
-            SELECT ?country ?gdp
-            WHERE {
-                SERVICE <http://localhost:3030/europe/sparql> {
-                    {
-                        SELECT (AVG(?g) AS ?avgGdp)
-                        WHERE {
-                            ?c a ex:Country ;
-                            ex:gdpPerCapitaUSD ?g.
-                        }
-                    }
-                    ?country a ex:Country ;
-                    ex:gdpPerCapitaUSD ?gdp.
-                    FILTER(?gdp > ?avgGdp)
-                }
-            }
-            ORDER BY DESC(?gdp)
-        """;
+    q8 = wrapWithService(q8, "http://localhost:3030/europe/sparql");
     runner.runQuery(q8);
 
     // Consulta 9: Países con población similar a España (+- 30%) con mayor PIB.
-    q9 =
-        """
-        PREFIX ex: <http://example.org/europe#>
-        SELECT ?country ?gdp ?p
-        WHERE {
-            SERVICE <http://localhost:3030/europe/sparql> {
-                {
-                    SELECT ?pSpain ?gdpSpain
-                    WHERE {
-                        ?c a ex:Country;
-                        ex:countryName ?name;
-                        ex:population ?pSpain;
-                        ex:gdpPerCapitaUSD ?gdpSpain.
-                        FILTER(?name = "Spain")
-                    }
-                }
-                ?country a ex:Country ;
-                ex:gdpPerCapitaUSD ?gdp;
-                ex:population ?p.
-                FILTER(ABS(?p - ?pSpain) <= (?pSpain *0.3) && ?gdp > ?gdpSpain)
-            }
-        }
-        ORDER BY DESC(?gdp)
-        """;
+    q9 = wrapWithService(q9, "http://localhost:3030/europe/sparql");
     runner.runQuery(q9);
 
     // Consulta 10: Crear propiedad que indique el PIB en euros.
-    q10 =
-        """
-        PREFIX ex: <http://example.org/europe#>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-        CONSTRUCT {
-            ?country ex:gdpPerCapitaEUR ?gdpEur.
-        }
-        WHERE {
-            SERVICE <http://localhost:3030/europe/sparql> {
-                ?country a ex:Country ;
-                ex:gdpPerCapitaUSD ?gdpUsd.
-                BIND( (?gdpUsd * 0.85) AS ?gdpEur)
-            }
-        }
-        """;
+    q10 = wrapWithService(q10, "http://localhost:3030/europe/sparql");
     runner.runConstructQuery(q10); // We have added this method call to run the CONSTRUCT query
 
     // Consulta 11: Crear una nueva propiedad llamada ex:gdpRank, cuyo objetivo es indicar la
@@ -423,31 +168,7 @@ public class App {
     // The only way I found to do this is by counting how many countries have a higher GDP per
     // capita than the current one.
     // Use OPTIONAL because the highest GDP country will not have any.
-    q11 =
-        """
-        PREFIX ex: <http://example.org/europe#>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-        CONSTRUCT {
-            ?country ex:gdpRank ?rank.
-        }
-        WHERE {
-            SERVICE <http://localhost:3030/europe/sparql> {
-                {
-                    SELECT ?country (COUNT(?higherGdp) AS ?rank)
-                    WHERE {
-                        ?country a ex:Country ;
-                        ex:gdpPerCapitaUSD ?gdp.
-                        OPTIONAL {
-                            ?higherGdp a ex:Country ;
-                            ex:gdpPerCapitaUSD ?higherGdpValue.
-                            FILTER(?higherGdpValue > ?gdp)
-                        }
-                    }
-                    GROUP BY ?country
-                }
-            }
-        }
-        """;
+    q11 = wrapWithService(q11, "http://localhost:3030/europe/sparql");
     runner.runConstructQuery(q11);
   }
 }
