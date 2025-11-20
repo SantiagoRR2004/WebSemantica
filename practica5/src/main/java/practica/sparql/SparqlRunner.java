@@ -19,10 +19,10 @@ public class SparqlRunner {
   }
 
   public void runQuery(String queryStr) {
-    System.out.println(" \n==== EJECUTANDO CONSULTA ====\n");
     Query query = QueryFactory.create(queryStr);
     try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
       ResultSet results = qexec.execSelect();
+      System.out.println(" \n==== EJECUTANDO CONSULTA ====\n");
       ResultSetFormatter.out(System.out, results, query);
     }
   }
@@ -38,10 +38,10 @@ public class SparqlRunner {
   }
 
   public void runConstructQuery(String queryStr) {
-    System.out.println(" \n==== EJECUTANDO CONSULTA CONSTRUCT ====\n");
     Query query = QueryFactory.create(queryStr);
     try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
       Model constructModel = qexec.execConstruct();
+      System.out.println(" \n==== EJECUTANDO CONSULTA CONSTRUCT ====\n");
       constructModel.write(System.out, "TURTLE");
     }
   }

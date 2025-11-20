@@ -15,6 +15,7 @@ WHERE {
     ?country a ex:Country ;
     ex:gdpPerCapitaUSD ?gdp;
     ex:population ?p.
+    // Población similar a España (+-30%)
     FILTER(ABS(?p - ?pSpain) <= (?pSpain *0.3) && ?gdp > ?gdpSpain)
 }
 ORDER BY DESC(?gdp)

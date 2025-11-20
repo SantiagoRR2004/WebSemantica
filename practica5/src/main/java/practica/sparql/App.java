@@ -72,9 +72,18 @@ public class App {
     File folder = new File(queryFolder);
     File[] listOfFiles = folder.listFiles();
 
-    // Sort files to ensure consistent order
+    // Sort files to ensure consistent order (natural ordering by number)
     if (listOfFiles != null) {
-      java.util.Arrays.sort(listOfFiles);
+      java.util.Arrays.sort(listOfFiles, (f1, f2) -> {
+        String name1 = f1.getName();
+        String name2 = f2.getName();
+        
+        // Extract numeric part (e.g., "q1.sparql" -> 1)
+        int num1 = Integer.parseInt(name1.replaceAll("\\D+", ""));
+        int num2 = Integer.parseInt(name2.replaceAll("\\D+", ""));
+        
+        return Integer.compare(num1, num2);
+      });
     }
 
     for (File file : listOfFiles) {
