@@ -8,8 +8,7 @@ public class App {
   static final String inputFileName =
       Paths.get(System.getProperty("user.dir"), "src", "main", "resources", "europe.ttl")
           .toString();
-  static final String queryFolder =
-      Paths.get(System.getProperty("user.dir"), "queries").toString();
+  static final String queryFolder = Paths.get(System.getProperty("user.dir"), "queries").toString();
 
   private static String wrapWithService(String query, String serviceUrl) {
     // Extract PREFIX declarations
@@ -110,7 +109,5 @@ public class App {
         runner.runConstructQuery(q);
       }
     }
-
-
   }
 }

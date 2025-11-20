@@ -52,7 +52,7 @@ public class SparqlRunner {
       Model constructModel = qexec.execConstruct();
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       constructModel.write(baos, "TURTLE");
-      
+
       // Sort the output lines to ensure consistent ordering for comparison
       String output = baos.toString();
       String[] lines = output.split("\n");
