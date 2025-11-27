@@ -1,0 +1,17 @@
+PREFIX ex: <http://example.org/authors#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+SELECT ?author ?localLabel ?wikidataId ?birthDate
+WHERE {
+    ?author a ex:author ;
+        rdfs:label ?localLabel ;
+        ex:wikidataId ?wikidataId .
+
+    SERVICE <https://query.wikidata.org/sparql> {
+        ?wikidataId wdt:P569 ?birthDate .
+    }
+
+}
+ORDER BY ?localLabel
