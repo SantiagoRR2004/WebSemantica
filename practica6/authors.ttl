@@ -1,0 +1,13 @@
+@prefix ex:   <http://example.org/authors#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix wd:   <http://www.wikidata.org/entity/> .
+
+ex:james a ex:author ;
+  rdfs:label "Erika Leonard"@en ;
+  rdfs:label "E. L. James"@es ;
+  ex:wikidataId wd:Q59896 .
+
+ex:gabas a ex:author ;
+  rdfs:label "Luz Gabás"@es ;
+  ex:wikidataId wd:Q18748483 .
+
