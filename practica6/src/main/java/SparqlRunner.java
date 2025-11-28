@@ -20,5 +20,4 @@ public class SparqlRunner {
       constructModel.write(System.out, "TURTLE");
     }
   }
-
 }
