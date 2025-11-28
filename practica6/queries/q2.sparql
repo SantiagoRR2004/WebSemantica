@@ -2,6 +2,7 @@ PREFIX ex: <http://example.org/authors#>
 
 CONSTRUCT {
     ?author ?propertyID ?valueID .
+    ?valueID2 ?propertyID2 ?author .
 }
 
 WHERE {
@@ -10,6 +11,7 @@ WHERE {
 
     SERVICE <https://query.wikidata.org/sparql> {
         ?wikidataId ?propertyID ?valueID .
+        ?valueID2 ?propertyID2 ?wikidataId .
     }
 
 }

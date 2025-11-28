@@ -3,6 +3,7 @@ PREFIX wpdn: <http://www.wikidata.org/prop/direct-normalized/>
 
 CONSTRUCT {
     ?author ?propertyID ?valueID .
+    ?valueID2 ?propertyID2 ?author .
 }
 
 WHERE {
@@ -39,6 +40,7 @@ WHERE {
 
     SERVICE ?endpoint {
         ?ID ?propertyID ?valueID .
+        ?valueID2 ?propertyID2 ?ID .
     }
 
 }
