@@ -4,7 +4,8 @@ import java.nio.file.Paths;
 
 public class Main {
 
-  static final String inputFileName = Paths.get(System.getProperty("user.dir"), "authors.ttl").toString();
+  static final String inputFileName =
+      Paths.get(System.getProperty("user.dir"), "authors.ttl").toString();
   static final String queryFolder = Paths.get(System.getProperty("user.dir"), "queries").toString();
 
   private static String readQuery(String fileName) {
@@ -20,8 +21,6 @@ public class Main {
 
     // Create the runner
     SparqlRunner runner = new SparqlRunner(inputFileName);
-
-
 
     File folder = new File(queryFolder);
     File[] listOfFiles = folder.listFiles();
