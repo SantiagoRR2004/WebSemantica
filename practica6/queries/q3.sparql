@@ -1,0 +1,18 @@
+# Nationale Thesaurus voor Auteursnamen ID
+PREFIX ex: <http://example.org/authors#>
+PREFIX wpdn: <http://www.wikidata.org/prop/direct-normalized/>
+PREFIX bibliotheken: <http://data.bibliotheken.nl/id/thes/>
+
+CONSTRUCT {
+    ?author ?propertyID ?valueID .
+}
+
+WHERE {
+    ?author a ex:author ;
+        wpdn:P1006 ?bibliothekenID .
+
+    SERVICE <https://data.bibliotheken.nl/sparql> {
+        ?bibliothekenID ?propertyID ?valueID .
+    }
+
+}
