@@ -3,7 +3,10 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
-SELECT ?author ?localLabel ?wikidataId ?birthDate
+CONSTRUCT {
+    ?author wdt:P569 ?birthDate.
+}
+
 WHERE {
     ?author a ex:author ;
         rdfs:label ?localLabel ;
