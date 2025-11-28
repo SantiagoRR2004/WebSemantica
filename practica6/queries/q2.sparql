@@ -1,0 +1,15 @@
+PREFIX ex: <http://example.org/authors#>
+
+CONSTRUCT {
+    ?author ?propertyID ?valueID .
+}
+
+WHERE {
+    ?author a ex:author ;
+        ex:wikidataId ?wikidataId .
+
+    SERVICE <https://query.wikidata.org/sparql> {
+        ?wikidataId ?propertyID ?valueID .
+    }
+
+}
