@@ -31,5 +31,4 @@ public class SparqlRunner {
       e.printStackTrace();
     }
   }
-
 }

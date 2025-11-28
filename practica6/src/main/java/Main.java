@@ -10,7 +10,6 @@ public class Main {
   static final String outputFileName =
       Paths.get(System.getProperty("user.dir"), "authorsComplete.ttl").toString();
 
-
   private static String readQuery(String fileName) {
     try {
       return Files.readString(Paths.get(System.getProperty("user.dir"), "queries", fileName));
@@ -50,9 +49,7 @@ public class Main {
       runner.runConstructQuery(queryString);
     }
 
-
     // Save the file
     runner.saveToFile(outputFileName);
-
   }
 }
