@@ -21,14 +21,21 @@ public class SparqlRunner {
 
       // Eliminate triples with '/.well-known/genid/' in any node
       java.util.List<org.apache.jena.rdf.model.Statement> toRemove = new java.util.ArrayList<>();
-      constructModel.listStatements().forEachRemaining(stmt -> {
-        boolean subj = stmt.getSubject().isURIResource() && stmt.getSubject().getURI().contains("/.well-known/genid/");
-        boolean pred = stmt.getPredicate().getURI().contains("/.well-known/genid/");
-        boolean obj = stmt.getObject().isURIResource() && stmt.getObject().asResource().getURI().contains("/.well-known/genid/");
-        if (subj || pred || obj) {
-          toRemove.add(stmt);
-        }
-      });
+      constructModel
+          .listStatements()
+          .forEachRemaining(
+              stmt -> {
+                boolean subj =
+                    stmt.getSubject().isURIResource()
+                        && stmt.getSubject().getURI().contains("/.well-known/genid/");
+                boolean pred = stmt.getPredicate().getURI().contains("/.well-known/genid/");
+                boolean obj =
+                    stmt.getObject().isURIResource()
+                        && stmt.getObject().asResource().getURI().contains("/.well-known/genid/");
+                if (subj || pred || obj) {
+                  toRemove.add(stmt);
+                }
+              });
       constructModel.remove(toRemove);
 
       constructModel.write(System.out, "TURTLE");
