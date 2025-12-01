@@ -12,6 +12,10 @@ WHERE {
     SERVICE <https://query.wikidata.org/sparql> {
         ?wikidataId ?propertyID ?valueID .
         ?valueID2 ?propertyID2 ?wikidataId .
+
+        # Do not start with http://www.wikidata.org/entity/statement/
+        FILTER(!STRSTARTS(STR(?valueID), "http://www.wikidata.org/entity/statement/"))
+        FILTER(!STRSTARTS(STR(?valueID2), "http://www.wikidata.org/entity/statement/"))
     }
 
 }

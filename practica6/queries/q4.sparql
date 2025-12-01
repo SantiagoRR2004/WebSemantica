@@ -1,0 +1,47 @@
+PREFIX ex: <http://example.org/authors#>
+PREFIX wpdn: <http://www.wikidata.org/prop/direct-normalized/>
+
+CONSTRUCT {
+    ?author ?propertyID ?valueID .
+    ?valueID2 ?propertyID2 ?author .
+}
+
+WHERE {
+    ?author a ex:author ;
+        ?property ?ID .
+
+    FILTER(STRSTARTS(STR(?property), STR(wpdn:)))
+
+    BIND(STR(?ID) AS ?IDStr)
+    BIND(STRAFTER(?IDStr, "://") AS ?afterHttp)
+    BIND(REPLACE(?afterHttp, "/.*$", "", "i") AS ?domain)
+    BIND(CONCAT("https://", ?domain, "/sparql") AS ?endpointStr)
+    BIND(IRI(?endpointStr) AS ?endpoint)
+
+    # Remove 404
+    FILTER(?domain NOT IN ("d-nb.info"))
+    FILTER(?domain NOT IN ("livedata.bibsys.no"))
+    FILTER(?domain NOT IN ("datos.bne.es"))
+    FILTER(?domain NOT IN ("viaf.org"))
+    FILTER(?domain NOT IN ("id.loc.gov"))
+    FILTER(?domain NOT IN ("g.co"))
+    FILTER(?domain NOT IN ("www.idref.fr"))
+    FILTER(?domain NOT IN ("bl.natbib-lod.org"))
+    FILTER(?domain NOT IN ("cir.nii.ac.jp"))
+    FILTER(?domain NOT IN ("www.bbc.co.uk"))
+    FILTER(?domain NOT IN ("data.beeldengeluid.nl"))
+    FILTER(?domain NOT IN ("id.worldcat.org"))
+    FILTER(?domain NOT IN ("ci.nii.ac.jp"))
+    FILTER(?domain NOT IN ("data.nlg.gr"))
+    FILTER(?domain NOT IN ("id.ndl.go.jp"))
+    FILTER(?domain NOT IN ("openlibrary.org"))
+    FILTER(?domain NOT IN ("data.europeana.eu"))
+    FILTER(?domain NOT IN ("urn.fi"))
+    FILTER(?domain NOT IN ("lod.nl.go.kr"))
+
+    SERVICE ?endpoint {
+        ?ID ?propertyID ?valueID .
+        ?valueID2 ?propertyID2 ?ID .
+    }
+
+}

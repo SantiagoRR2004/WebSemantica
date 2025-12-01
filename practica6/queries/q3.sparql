@@ -1,46 +1,30 @@
 PREFIX ex: <http://example.org/authors#>
-PREFIX wpdn: <http://www.wikidata.org/prop/direct-normalized/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX wikibase: <http://wikiba.se/ontology#>
 
 CONSTRUCT {
-    ?author ?propertyID ?valueID .
-    ?valueID2 ?propertyID2 ?author .
+    ?author ?propertyID ?o .
+    ?o2 ?propertyID2 ?author .
 }
 
 WHERE {
     ?author a ex:author ;
-        ?property ?ID .
+        ex:wikidataId ?wikidataId .
 
-    FILTER(STRSTARTS(STR(?property), STR(wpdn:)))
+    SERVICE <https://query.wikidata.org/sparql> {
+        ?wikidataId ?propertyID ?valueID .
+        ?valueID2 ?propertyID2 ?wikidataId .
 
-    BIND(STR(?ID) AS ?IDStr)
-    BIND(STRAFTER(?IDStr, "://") AS ?afterHttp)
-    BIND(REPLACE(?afterHttp, "/.*$", "", "i") AS ?domain)
-    BIND(CONCAT("https://", ?domain, "/sparql") AS ?endpointStr)
-    BIND(IRI(?endpointStr) AS ?endpoint)
+        # Start with http://www.wikidata.org/entity/statement/
+        FILTER(STRSTARTS(STR(?valueID), "http://www.wikidata.org/entity/statement/"))
+        FILTER(STRSTARTS(STR(?valueID2), "http://www.wikidata.org/entity/statement/"))
 
-    # Remove 404
-    FILTER(?domain NOT IN ("d-nb.info"))
-    FILTER(?domain NOT IN ("livedata.bibsys.no"))
-    FILTER(?domain NOT IN ("datos.bne.es"))
-    FILTER(?domain NOT IN ("viaf.org"))
-    FILTER(?domain NOT IN ("id.loc.gov"))
-    FILTER(?domain NOT IN ("g.co"))
-    FILTER(?domain NOT IN ("www.idref.fr"))
-    FILTER(?domain NOT IN ("bl.natbib-lod.org"))
-    FILTER(?domain NOT IN ("cir.nii.ac.jp"))
-    FILTER(?domain NOT IN ("www.bbc.co.uk"))
-    FILTER(?domain NOT IN ("data.beeldengeluid.nl"))
-    FILTER(?domain NOT IN ("id.worldcat.org"))
-    FILTER(?domain NOT IN ("ci.nii.ac.jp"))
-    FILTER(?domain NOT IN ("data.nlg.gr"))
-    FILTER(?domain NOT IN ("id.ndl.go.jp"))
-    FILTER(?domain NOT IN ("openlibrary.org"))
-    FILTER(?domain NOT IN ("data.europeana.eu"))
-    FILTER(?domain NOT IN ("urn.fi"))
+        # Add statement to http://www.wikidata.org/prop/statement/XXXXX (?propertyID)
+        BIND(IRI(REPLACE(STR(?propertyID), "http://www.wikidata.org/prop/", "http://www.wikidata.org/prop/statement/")) AS ?statementPropID)
+        ?valueID ?statementPropID ?o .
 
-    SERVICE ?endpoint {
-        ?ID ?propertyID ?valueID .
-        ?valueID2 ?propertyID2 ?ID .
+        BIND(IRI(REPLACE(STR(?propertyID2), "http://www.wikidata.org/prop/", "http://www.wikidata.org/prop/statement/")) AS ?statementPropID2)
+        ?valueID2 ?statementPropID2 ?o2 .
     }
 
 }
