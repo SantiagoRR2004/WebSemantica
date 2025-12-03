@@ -2,19 +2,31 @@ PREFIX ex: <http://example.org/authors#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
 
 CONSTRUCT {
-    ?author wdt:P569 ?birthDate.
+    ?author wdt:P569 ?birthDate .
+    ?author wdt:P19 ?birthPlace .
+    wd:P569 rdfs:label ?birthDateLabel .
+    wd:P19 rdfs:label ?birthPlaceLabel .
+    ?birthPlace rdfs:label ?birthPlaceName .
 }
-
 WHERE {
     ?author a ex:author ;
         rdfs:label ?localLabel ;
         ex:wikidataId ?wikidataId .
 
     SERVICE <https://query.wikidata.org/sparql> {
-        ?wikidataId wdt:P569 ?birthDate .
-    }
+        ?wikidataId wdt:P569 ?birthDate ;
+            wdt:P19 ?birthPlace .
 
+        SERVICE wikibase:label {
+            bd:serviceParam wikibase:language "es" .
+            wd:P569 rdfs:label ?birthDateLabel .
+            wd:P19 rdfs:label ?birthPlaceLabel .
+            ?birthPlace rdfs:label ?birthPlaceName .
+        }
+    }
 }
 ORDER BY ?localLabel

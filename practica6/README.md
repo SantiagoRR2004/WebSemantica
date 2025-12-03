@@ -2,7 +2,7 @@
 
 ## [Birthday](./queries/q1.sparql)
 
-In this query, we retrieve the authors' birth dates from DBpedia.
+In this query, we retrieve the authors' birth dates and place from DBpedia with the label of both properties.
 
 ## [DBpedia (no `statements`)](./queries/q2.sparql)
 
