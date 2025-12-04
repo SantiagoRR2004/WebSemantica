@@ -1,10 +1,17 @@
 PREFIX ex: <http://example.org/authors#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX wd: <http://www.wikidata.org/entity/>
 
 CONSTRUCT {
     ?author ?propertyID ?valueID .
     ?valueID2 ?propertyID2 ?author .
-}
 
+    # Añadimos las labels de las propiedades
+    ?propertyEntity rdfs:label ?propLabelEs .
+    ?propertyEntity2 rdfs:label ?propLabelEs2 .
+}
 WHERE {
     ?author a ex:author ;
         ex:wikidataId ?wikidataId .
@@ -13,9 +20,30 @@ WHERE {
         ?wikidataId ?propertyID ?valueID .
         ?valueID2 ?propertyID2 ?wikidataId .
 
-        # Do not start with http://www.wikidata.org/entity/statement/
         FILTER(!STRSTARTS(STR(?valueID), "http://www.wikidata.org/entity/statement/"))
         FILTER(!STRSTARTS(STR(?valueID2), "http://www.wikidata.org/entity/statement/"))
-    }
 
+        # ---- Convertir wdt:Pxxx -> wd:Pxxx (propiedades SALIENTES)
+        BIND(
+          IRI(REPLACE(STR(?propertyID),
+              "http://www.wikidata.org/prop/direct/",
+              "http://www.wikidata.org/entity/"))
+          AS ?propertyEntity
+        )
+
+        # ---- Convertir wdt:Pxxx -> wd:Pxxx (propiedades ENTRANTES)
+        BIND(
+          IRI(REPLACE(STR(?propertyID2),
+              "http://www.wikidata.org/prop/direct/",
+              "http://www.wikidata.org/entity/"))
+          AS ?propertyEntity2
+        )
+
+        # ---- Obtener labels en español
+        SERVICE wikibase:label {
+            bd:serviceParam wikibase:language "es" .
+            ?propertyEntity  rdfs:label ?propLabelEs .
+            ?propertyEntity2 rdfs:label ?propLabelEs2 .
+        }
+    }
 }
