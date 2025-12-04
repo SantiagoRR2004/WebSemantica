@@ -3,27 +3,34 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 PREFIX bd: <http://www.bigdata.com/rdf#>
 PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX schema: <http://schema.org/>
 
 CONSTRUCT {
     ?author ?propertyID ?valueID .
-    ?valueID2 ?propertyID2 ?author .
-
-    # Añadimos las labels de las propiedades
     ?propertyEntity rdfs:label ?propLabelEs .
-    ?propertyEntity2 rdfs:label ?propLabelEs2 .
+    ?valueID rdfs:label ?valueLabelEs .
 }
 WHERE {
     ?author a ex:author ;
         ex:wikidataId ?wikidataId .
 
     SERVICE <https://query.wikidata.org/sparql> {
+
+        VALUES ?propertyID {
+            wdt:P21
+            wdt:P1477
+            wdt:P2671
+            wdt:P27
+            schema:description
+        }
+
         ?wikidataId ?propertyID ?valueID .
-        ?valueID2 ?propertyID2 ?wikidataId .
 
-        FILTER(!STRSTARTS(STR(?valueID), "http://www.wikidata.org/entity/statement/"))
-        FILTER(!STRSTARTS(STR(?valueID2), "http://www.wikidata.org/entity/statement/"))
+        FILTER(!STRSTARTS(STR(?valueID),
+               "http://www.wikidata.org/entity/statement/"))
 
-        # ---- Convertir wdt:Pxxx -> wd:Pxxx (propiedades SALIENTES)
+        # Convert wdt:Pxxx -> wd:Pxxx
         BIND(
           IRI(REPLACE(STR(?propertyID),
               "http://www.wikidata.org/prop/direct/",
@@ -31,19 +38,10 @@ WHERE {
           AS ?propertyEntity
         )
 
-        # ---- Convertir wdt:Pxxx -> wd:Pxxx (propiedades ENTRANTES)
-        BIND(
-          IRI(REPLACE(STR(?propertyID2),
-              "http://www.wikidata.org/prop/direct/",
-              "http://www.wikidata.org/entity/"))
-          AS ?propertyEntity2
-        )
-
-        # ---- Obtener labels en español
         SERVICE wikibase:label {
             bd:serviceParam wikibase:language "es" .
-            ?propertyEntity  rdfs:label ?propLabelEs .
-            ?propertyEntity2 rdfs:label ?propLabelEs2 .
+            ?propertyEntity rdfs:label ?propLabelEs .
+            ?valueID rdfs:label ?valueLabelEs .
         }
     }
 }

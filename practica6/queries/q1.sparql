@@ -8,8 +8,8 @@ PREFIX bd: <http://www.bigdata.com/rdf#>
 CONSTRUCT {
     ?author wdt:P569 ?birthDate .
     ?author wdt:P19 ?birthPlace .
-    ?author rdfs:label ?birthDateLabel .
-    ?author rdfs:label ?birthPlaceLabel .
+    wd:P569 rdfs:label ?birthDateLabel .
+    wd:P19 rdfs:label ?birthPlaceLabel .
     ?birthPlace rdfs:label ?birthPlaceName .
 }
 WHERE {
