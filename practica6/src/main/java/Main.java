@@ -7,7 +7,8 @@ public class Main {
   static final String inputFileName =
       Paths.get(System.getProperty("user.dir"), "authors.ttl").toString();
   static final String queryFolder = Paths.get(System.getProperty("user.dir"), "queries").toString();
-  static final String outputFolder = Paths.get(System.getProperty("user.dir"), "outputs").toString();
+  static final String outputFolder =
+      Paths.get(System.getProperty("user.dir"), "outputs").toString();
   static final String outputFileName =
       Paths.get(System.getProperty("user.dir"), "authors-enriched.ttl").toString();
 
