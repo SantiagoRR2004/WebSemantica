@@ -1,0 +1,16 @@
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+CONSTRUCT {
+    ?subject1 wdt:P345 ?iMDbID .
+}
+WHERE {
+    ?subject1 ?p1 ?o1 .
+
+    FILTER(STRSTARTS(STR(?subject1), STR(wd:)))
+
+    SERVICE <https://query.wikidata.org/sparql> {
+        ?subject1 wdt:P345 ?iMDbID .
+    }
+
+}

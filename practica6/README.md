@@ -5,13 +5,14 @@
 In this query, we retrieve the authors' birth dates and place from DBpedia with the label of both properties.
 
 ## [Add more properties 4.2](./queries/q2.sparql)
+
 In this query, we retrieve more properties from DBpedia with the label of each property. We selected the following properties:
 wd:P21  rdfs:label  "sexo o género"@es .
 wd:P1477  rdfs:label  "nombre de nacimiento"@es
 wd:P2671  rdfs:label  "identificador Google Knowledge Graph"@es .
 wd:P27  rdfs:label  "país de nacionalidad"@es .
 schema:description
-        rdfs:label  "http://schema.org/description" .
+        rdfs:label  "<http://schema.org/description>" .
 
 ## [prop/direct-normalized](./queries/q4.sparql)
 
@@ -26,3 +27,7 @@ We also extract the labels from the properties to find 5 which could be interest
 ## [DBpedia (`statements`)](./queries/q6.sparql)
 
 This query gets all triples from DBpedia that have the authors as subject or object and fixes the ones that start with `http://www.wikidata.org/entity/statement/`.
+
+## [IMDb ID](./queries/q7.sparql)
+
+In this query, we find all subjects that have a IMDb ID and we add the triple. The problem is that we can't do anything with those IDs because [IMDB](https://www.imdb.com/) does not provide a IMDb SPARQL endpoint.
