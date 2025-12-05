@@ -7,6 +7,7 @@ public class Main {
   static final String inputFileName =
       Paths.get(System.getProperty("user.dir"), "authors.ttl").toString();
   static final String queryFolder = Paths.get(System.getProperty("user.dir"), "queries").toString();
+  static final String outputFolder = Paths.get(System.getProperty("user.dir"), "outputs").toString();
   static final String outputFileName =
       Paths.get(System.getProperty("user.dir"), "authors-enriched.ttl").toString();
 
@@ -43,10 +44,25 @@ public class Main {
           });
     }
 
+    // Ensure output directory exists
+    new File(outputFolder).mkdirs();
+
     for (File file : listOfFiles) {
       // Execute each file
       String queryString = readQuery(file.getName());
-      runner.runConstructQuery(queryString);
+      String result = runner.runConstructQuery(queryString);
+
+      // Save the result to a file
+      String resultFileName =
+          Paths.get(outputFolder, file.getName().replace(".sparql", ".ttl")).toString();
+      try {
+        Files.writeString(Paths.get(resultFileName), result);
+      } catch (Exception e) {
+        System.err.println("Error writing " + resultFileName + ": " + e.getMessage());
+      }
+
+      // Nothing went wrong
+      System.out.println(file.getName());
     }
 
     // Save the file

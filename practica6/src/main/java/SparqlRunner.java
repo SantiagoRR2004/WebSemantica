@@ -1,3 +1,4 @@
+import java.io.ByteArrayOutputStream;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -14,7 +15,7 @@ public class SparqlRunner {
     model.read(rdfFilePath);
   }
 
-  public void runConstructQuery(String queryStr) {
+  public String runConstructQuery(String queryStr) {
     Query query = QueryFactory.create(queryStr);
     try (QueryExecution qexec = QueryExecutionFactory.create(query, model)) {
       Model constructModel = qexec.execConstruct();
@@ -38,9 +39,13 @@ public class SparqlRunner {
               });
       constructModel.remove(toRemove);
 
-      constructModel.write(System.out, "TURTLE");
       // Add all statements from the construct result to the current model
       model.add(constructModel);
+
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      constructModel.write(baos, "TURTLE");
+
+      return baos.toString();
     }
   }
 
