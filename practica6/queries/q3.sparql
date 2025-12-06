@@ -7,10 +7,10 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX schema: <http://schema.org/>
 
 CONSTRUCT {
-    ?author ?propertyID ?valueID ;
-        schema:description ?valueDescEs .
-    ?propertyEntity rdfs:label ?propLabelEs .
+    ?author ?propertyID ?valueID .
     ?valueID rdfs:label ?valueLabelEs .
+    ?valueID schema:description ?valueDescEs .
+    ?propertyEntity rdfs:label ?propLabelEs .
 }
 WHERE {
     ?author a ex:author ;
@@ -19,17 +19,15 @@ WHERE {
     SERVICE <https://query.wikidata.org/sparql> {
 
         VALUES ?propertyID {
-            wdt:P21
-            wdt:P1477
-            wdt:P106
-            wdt:P27
+            wdt:P21   # Sexo o género
+            wdt:P27   # País de nacionalidad
+            wdt:P19   # Lugar de nacimiento
+            wdt:P1412 # Lenguas habladas
         }
 
-        ?wikidataId ?propertyID ?valueID;
-            schema:description ?valueDescEs .
-        FILTER(LANG(?valueDescEs) = "es")
+        ?wikidataId ?propertyID ?valueID .
 
-        # Convert wdt:Pxxx -> wd:Pxxx to get labels
+        # Convert wdt:Pxxx -> wd:Pxxx to get the label of the property
         BIND(
           IRI(REPLACE(STR(?propertyID),
               "http://www.wikidata.org/prop/direct/",
@@ -41,6 +39,7 @@ WHERE {
             bd:serviceParam wikibase:language "es" .
             ?propertyEntity rdfs:label ?propLabelEs .
             ?valueID rdfs:label ?valueLabelEs .
+            ?valueID schema:description ?valueDescEs .
         }
     }
 }
