@@ -1,10 +1,7 @@
 PREFIX ex: <http://example.org/authors#>
-PREFIX owl: <http://www.w3.org/2002/07/owl#>
-PREFIX wikibase: <http://wikiba.se/ontology#>
 
 CONSTRUCT {
     ?author ?propertyID ?o .
-    ?o2 ?propertyID2 ?author .
 }
 
 WHERE {
@@ -13,18 +10,13 @@ WHERE {
 
     SERVICE <https://query.wikidata.org/sparql> {
         ?wikidataId ?propertyID ?valueID .
-        ?valueID2 ?propertyID2 ?wikidataId .
-
+   
         # Start with http://www.wikidata.org/entity/statement/
         FILTER(STRSTARTS(STR(?valueID), "http://www.wikidata.org/entity/statement/"))
-        FILTER(STRSTARTS(STR(?valueID2), "http://www.wikidata.org/entity/statement/"))
 
         # Add statement to http://www.wikidata.org/prop/statement/XXXXX (?propertyID)
         BIND(IRI(REPLACE(STR(?propertyID), "http://www.wikidata.org/prop/", "http://www.wikidata.org/prop/statement/")) AS ?statementPropID)
         ?valueID ?statementPropID ?o .
-
-        BIND(IRI(REPLACE(STR(?propertyID2), "http://www.wikidata.org/prop/", "http://www.wikidata.org/prop/statement/")) AS ?statementPropID2)
-        ?valueID2 ?statementPropID2 ?o2 .
     }
 
 }

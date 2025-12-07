@@ -54,7 +54,7 @@ We also extract the labels from the properties to find 5 which could be interest
 
 ## [WikiData (`statements`)](./queries/q6.sparql)
 
-This query gets all triples from WikiData that have the authors as subject or object and fixes the ones that start with `http://www.wikidata.org/entity/statement/`.
+This query gets all triples from WikiData that have the authors as subject and fixes the ones that start with `http://www.wikidata.org/entity/statement/`.
 
 ## [IMDb ID](./queries/q7.sparql)
 
@@ -62,4 +62,4 @@ In this query, we find all subjects that have a IMDb ID and we add the triple. T
 
 ## [prop/direct-normalized](./queries/q8.sparql)
 
-This tries to get from all services that are linked in DBpedia, the triples that the authors are subject or object. Most of the domains fail, but a few add new triples.
+This tries to get from all services that are linked in Wikidata, the triples that the authors are subject or object. Most of the domains fail, but a few add new triples.
