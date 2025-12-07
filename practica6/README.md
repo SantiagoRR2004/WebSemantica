@@ -63,3 +63,29 @@ In this query, we find all subjects that have a IMDb ID and we add the triple. T
 ## [prop/direct-normalized](./queries/q8.sparql)
 
 This tries to get from all services that are linked in Wikidata, the triples that the authors are subject or object. Most of the domains fail, but a few add new triples.
+
+## Conclusion
+
+This practice demonstrates the enrichment of a local RDF graph about authors using external SPARQL endpoints (WikiData and DBpedia). The final enriched graph is stored in `authors-enriched.ttl`.
+
+### Properties found and added:
+
+**From WikiData:**
+- **Basic information (4.1):** Birth date (`wdt:P569`) and place of birth (`wdt:P19`) with their labels
+- **Author properties (4.2):** Sex or gender (`wdt:P21`), birth name (`wdt:P1477`), occupation (`wdt:P106`), country of nationality (`wdt:P27`), and descriptions (`schema:description`)
+- **Object relationships (4.3):** Four properties per author that link to objects (not literals): sex or gender, nationality, place of birth, and languages spoken. For each object, we extracted its label and description in Spanish
+- **All available data (4.5 & 4.6):** All triples where authors appear as subject or object, including statement nodes
+- **IMDb identifiers (4.7):** IMDb IDs for subjects that have them
+
+**From DBpedia (4.4):**
+- DBpedia IRI using `owl:sameAs` property
+- Descriptions (`dbo:description`)
+- Wikipedia links (`dbo:wikiPageWikiLink`)
+- Films produced by the author based on their books (`dbo:producer`)
+
+### Key contributions to the graph:
+
+1. **Multilingual labels and descriptions:** Enhanced understanding of entities with Spanish labels and descriptions
+2. **Cross-reference between datasets:** Linked WikiData and DBpedia resources using `owl:sameAs`
+3. **Relationship enrichment:** Not only added properties to authors, but also enriched the objects they relate to with labels and descriptions
+4. **Comprehensive data extraction:** Retrieved both direct properties and statement-based properties from WikiData
