@@ -64,6 +64,9 @@ ex:Department rdf:type owl:Class ;
 ####################################################################################################
 ####################################################################################################
 
+ex:isPartOf rdf:type owl:ObjectProperty ,
+    owl:TransitiveProperty .
+
 ex:enrolledIn rdf:type owl:ObjectProperty ;
   rdfs:domain ex:Student ;
   rdfs:range ex:Course ;
