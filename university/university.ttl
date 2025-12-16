@@ -9,9 +9,26 @@ ex:Person rdf:type owl:Class .
 ex:Student rdf:type owl:Class ;
   rdfs:subClassOf ex:Person . # Not specified
 
+ex:UndergraduateStudent rdf:type owl:Class ;
+  rdfs:subClassOf ex:Student ;
+  owl:disjointWith ex:GraduateStudent .
+
+ex:GraduateStudent rdf:type owl:Class ;
+  rdfs:subClassOf ex:Student .
+
 ex:Professor rdf:type owl:Class ;
   rdfs:subClassOf ex:Person . # Not specified
 
+ex:TenuredProfessor rdf:type owl:Class ;
+  rdfs:subClassOf ex:Professor ;
+  owl:disjointWith ex:AdjunctProfessor .
+
+ex:AdjunctProfessor rdf:type owl:Class ;
+  rdfs:subClassOf ex:Professor .
+
 ex:Course rdf:type owl:Class .
+
+ex:AdvancedCourse rdf:type owl:Class ;
+  rdfs:subClassOf ex:Course .
 
 ex:Department rdf:type owl:Class .
