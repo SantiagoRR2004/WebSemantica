@@ -4,6 +4,10 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
 ex:Person rdf:type owl:Class .
 
 ex:Student rdf:type owl:Class ;
@@ -32,3 +36,35 @@ ex:AdvancedCourse rdf:type owl:Class ;
   rdfs:subClassOf ex:Course .
 
 ex:Department rdf:type owl:Class .
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+ex:enrolledIn rdf:type owl:ObjectProperty ;
+  rdfs:domain ex:Student ;
+  rdfs:range ex:Course ;
+  owl:inverseOf ex:hasStudent .
+
+ex:teaches rdf:type owl:ObjectProperty ;
+  rdfs:domain ex:Professor ;
+  rdfs:range ex:Course ;
+  owl:inverseOf ex:isTaughtBy .
+
+ex:memberOf rdf:type owl:ObjectProperty ;
+  rdfs:domain ex:Person ;
+  rdfs:range ex:Department .
+
+ex:hasChair rdf:type owl:ObjectProperty ;
+  rdfs:domain ex:Department ;
+  rdfs:range ex:Professor .
+
+ex:hasPrerequisite rdf:type owl:ObjectProperty ,
+    owl:TransitiveProperty ;
+  rdfs:domain ex:Course ;
+  rdfs:range ex:Course .
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
