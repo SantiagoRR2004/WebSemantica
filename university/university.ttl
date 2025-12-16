@@ -107,3 +107,50 @@ ex:ects rdf:type owl:DatatypeProperty ;
 ex:contractType rdf:type owl:DatatypeProperty ;
   rdfs:domain ex:Professor ;
   rdfs:range xsd:string .
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+ex:csDept rdf:type ex:Department ;
+  ex:director ex:prof1 .
+
+ex:mathDept rdf:type ex:Department .
+
+ex:ir rdf:type ex:Course ;
+  ex:ects "6"^^xsd:integer .
+
+ex:ai rdf:type ex:Course ;
+  ex:ects "6"^^xsd:integer .
+
+ex:ml rdf:type ex:AdvancedCourse ;
+  ex:ects "6"^^xsd:integer ;
+  ex:hasPrerequisite ex:ai .
+
+ex:alice rdf:type ex:GraduateStudent ;
+  ex:hasName "Alice"^^xsd:string ;
+  ex:hasEmail "alice@example.com"^^xsd:string ;
+  ex:enrolledIn ex:ml .
+
+ex:bob rdf:type ex:UndergraduateStudent ;
+  ex:hasName "Bob"^^xsd:string ;
+  ex:hasEmail "bob@example.com"^^xsd:string ;
+  ex:enrolledIn ex:ir , ex:ai .
+
+ex:prof1 rdf:type ex:Professor ;
+  ex:hasName "Dr. Smith"^^xsd:string ;
+  ex:hasEmail "smith@example.com"^^xsd:string ;
+  ex:contractType "permanent"^^xsd:string ;
+  ex:teaches ex:ir .
+
+ex:prof2 rdf:type ex:Professor ;
+  ex:hasName "Dr. Jones"^^xsd:string ;
+  ex:hasEmail "jones@example.com"^^xsd:string ;
+  ex:teaches ex:ir .
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+
+## To create an inconsistency:
+# ex:alice rdf:type ex:UndergraduateStudent .
