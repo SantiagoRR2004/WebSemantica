@@ -68,3 +68,19 @@ ex:hasPrerequisite rdf:type owl:ObjectProperty ,
 ####################################################################################################
 ####################################################################################################
 
+ex:hasName rdf:type owl:DatatypeProperty ;
+  rdfs:domain ex:Person ;
+  rdfs:range xsd:string .
+
+ex:hasEmail rdf:type owl:DatatypeProperty ,
+     owl:FunctionalProperty ;
+  rdfs:domain ex:Person ;
+  rdfs:range xsd:string .
+
+ex:ects rdf:type owl:DatatypeProperty ;
+  rdfs:domain ex:Course ;
+  rdfs:range xsd:integer .
+
+ex:contractType rdf:type owl:DatatypeProperty ;
+  rdfs:domain ex:Professor ;
+  rdfs:range xsd:string .
