@@ -11,7 +11,14 @@
 ex:Person rdf:type owl:Class .
 
 ex:Student rdf:type owl:Class ;
-  rdfs:subClassOf ex:Person . # Not specified
+  rdfs:subClassOf ex:Person , # Not specified
+    [
+      rdf:type owl:Restriction ;
+      owl:onProperty ex:enrolledIn ;
+      owl:minQualifiedCardinality: "1"^^xsd:nonNegativeInteger ;
+      owl:maxQualifiedCardinality: "5"^^xsd:nonNegativeInteger ;
+      owl:onClass ex:Course
+    ] .
 
 ex:UndergraduateStudent rdf:type owl:Class ;
   rdfs:subClassOf ex:Student ;
@@ -21,10 +28,20 @@ ex:GraduateStudent rdf:type owl:Class ;
   rdfs:subClassOf ex:Student .
 
 ex:Professor rdf:type owl:Class ;
-  rdfs:subClassOf ex:Person . # Not specified
+  rdfs:subClassOf ex:Person , # Not specified
+    [
+      rdf:type owl:Restriction ;
+      owl:onProperty ex:teaches ;
+      owl:someValuesFrom ex:Course
+    ] .
 
 ex:TenuredProfessor rdf:type owl:Class ;
-  rdfs:subClassOf ex:Professor ;
+  rdfs:subClassOf ex:Professor ,
+    [
+      rdf:type owl:Restriction ;
+      owl:onProperty ex:contractType ;
+      owl:hasValue "permanent"^^xsd:string
+    ] ;
   owl:disjointWith ex:AdjunctProfessor .
 
 ex:AdjunctProfessor rdf:type owl:Class ;
@@ -35,7 +52,13 @@ ex:Course rdf:type owl:Class .
 ex:AdvancedCourse rdf:type owl:Class ;
   rdfs:subClassOf ex:Course .
 
-ex:Department rdf:type owl:Class .
+ex:Department rdf:type owl:Class ;
+  rdfs:subClassOf [
+    rdf:type owl:Restriction ;
+    owl:cardinality "1"^^ xsd:nonNegativeInteger ;
+    owl:onProperty ex:director ;
+    owl:onClass ex:Professor
+  ] .
 
 ####################################################################################################
 ####################################################################################################
