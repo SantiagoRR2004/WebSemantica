@@ -44,7 +44,7 @@ Additionally, we retrieve the labels of the properties used to facilitate unders
 
 ## [Information from DBpedia 4.4](./queries/q4.sparql)
 
-This query retrieves the DBpedia IRI for each author using the `owl:sameAs` property from DBpedia with the ID of wikidata.DBpedia IRI is used to get the description, wikipedia links and the films produced by the author from DBpedia.
+This query retrieves the DBpedia IRI for each author using the `owl:sameAs` property from DBpedia with the ID of wikidata. DBpedia IRI is used to get the description, wikipedia links and the films produced by the author from DBpedia.
 
 ## [WikiData (no `statements`)](./queries/q5.sparql)
 
@@ -68,9 +68,10 @@ This tries to get from all services that are linked in Wikidata, the triples tha
 
 This practice demonstrates the enrichment of a local RDF graph about authors using external SPARQL endpoints (WikiData and DBpedia). The final enriched graph is stored in `authors-enriched.ttl`.
 
-### Properties found and added:
+### Properties found and added
 
 **From WikiData:**
+
 - **Basic information (4.1):** Birth date (`wdt:P569`) and place of birth (`wdt:P19`) with their labels
 - **Author properties (4.2):** Sex or gender (`wdt:P21`), birth name (`wdt:P1477`), occupation (`wdt:P106`), country of nationality (`wdt:P27`), and descriptions (`schema:description`)
 - **Object relationships (4.3):** Four properties per author that link to objects (not literals): sex or gender, nationality, place of birth, and languages spoken. For each object, we extracted its label and description in Spanish
@@ -78,12 +79,13 @@ This practice demonstrates the enrichment of a local RDF graph about authors usi
 - **IMDb identifiers (4.7):** IMDb IDs for subjects that have them
 
 **From DBpedia (4.4):**
+
 - DBpedia IRI using `owl:sameAs` property
 - Descriptions (`dbo:description`)
 - Wikipedia links (`dbo:wikiPageWikiLink`)
 - Films produced by the author based on their books (`dbo:producer`)
 
-### Key contributions to the graph:
+### Key contributions to the graph
 
 1. **Multilingual labels and descriptions:** Enhanced understanding of entities with Spanish labels and descriptions
 2. **Cross-reference between datasets:** Linked WikiData and DBpedia resources using `owl:sameAs`
